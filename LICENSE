@@ -1,12 +1,12 @@
-# PROPRIETARY LICENSE AGREEMENT: CatV6
+# PROPRIETARY LICENSE AGREEMENT: BadvapeV2
 
-Copyright (c) 2026 MaxlaserTech
+Copyright (c) 2026 ezbrohack
 
-By accessing, viewing, downloading, copying, modifying, distributing, publishing, or otherwise interacting with the code in the CatV6 repository (hosted at https://github.com/MaxlaserTech/CatV6), you agree to the following terms and conditions.
+By accessing, viewing, downloading, copying, modifying, distributing, publishing, or otherwise interacting with the code in the BadvapeV2 repository (hosted at https://github.com/MaxlaserTech/BadvapeV2), you agree to the following terms and conditions.
 
 ## 1. PERMISSIONS
 
-Permission is hereby granted to any person obtaining a copy of the CatV6 code to:
+Permission is hereby granted to any person obtaining a copy of the BadvapeV2 code to:
 
 * View and inspect the source code.
 * Use the code for personal, private, educational, or research purposes.
@@ -38,7 +38,7 @@ Users may:
 * Share the code with other individuals.
 * Include the code in other projects.
 * Publish modified versions.
-* Create derivative projects based on CatV6.
+* Create derivative projects based on BadvapeV2.
 
 Any distributed copy or derivative work should retain the original copyright notice where reasonably practicable.
 
@@ -57,7 +57,7 @@ Users may modify the code for:
 * Independent development.
 * Derivative works.
 
-A Pull Request to the official MaxlaserTech/CatV6 repository is optional and is not required for modification or distribution.
+A Pull Request to the official MaxlaserTech/BadvapeV2 repository is optional and is not required for modification or distribution.
 
 ## 5. COMMERCIAL AND PUBLIC USE
 
@@ -83,11 +83,11 @@ No additional permission or license is required from MaxlaserTech for these uses
 
 Forking, cloning, copying, mirroring, and re-hosting the repository or portions of its source code are permitted.
 
-Users may maintain independent versions of CatV6 and may publish such versions on any hosting platform.
+Users may maintain independent versions of BadvapeV2 and may publish such versions on any hosting platform.
 
 ## 7. COPYRIGHT
 
-Copyright in the original CatV6 source code remains with MaxlaserTech.
+Copyright in the original BadvapeV2 source code remains with MaxlaserTech.
 
 This license does not transfer ownership of the original copyright to users.
 
@@ -97,7 +97,7 @@ Users retain ownership of their own original modifications and independently cre
 
 The permissions granted under this license are irrevocable for copies of the software that have already been lawfully obtained under this license, except where termination is required by applicable law or where a user violates the terms of this license.
 
-The removal or deletion of the official CatV6 repository does not automatically terminate rights previously granted under this license.
+The removal or deletion of the official BadvapeV2 repository does not automatically terminate rights previously granted under this license.
 
 ## 9. DISCLAIMER
 
@@ -107,4 +107,4 @@ IN NO EVENT SHALL THE AUTHORS, COPYRIGHT HOLDERS, OR MAINTAINERS BE LIABLE FOR A
 
 ## 10. ACCEPTANCE
 
-By using, copying, modifying, distributing, publishing, or otherwise interacting with CatV6, you acknowledge that you have read and understood this license and agree to its terms.
+By using, copying, modifying, distributing, publishing, or otherwise interacting with BadvapeV2, you acknowledge that you have read and understood this license and agree to its terms.
