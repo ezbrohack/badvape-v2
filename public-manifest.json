@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "revision": "sha256-85fb7145756ed29b01aff9d9a14155fff7e8780a1a33a0ce067466d37a406951",
+  "revision": "sha256-7e7ac9b43fd3475421e67e1bf82457a63d26ffd221f8029dc0ba885614fc902a",
   "files": [
     {
       "path": "bootstrap.lua",
-      "bytes": 5996,
-      "sha256": "2c0f19a361b544d49465b5e842dee514f6abdda35bab774cf72621a99f2a3e40"
+      "bytes": 6004,
+      "sha256": "910780f02b0510a937ae2e6b372de7359ea1ea82686ddd96f9c496140f7f92e1"
     },
     {
       "path": "games/11156779721.lua",
@@ -139,8 +139,8 @@
     },
     {
       "path": "init.lua",
-      "bytes": 54142,
-      "sha256": "052f06458982d295446a1262938d600d98b270142cc074dd7650e6e5bea10ea2"
+      "bytes": 54146,
+      "sha256": "b38e60f6d5d8fd784291f4c89b8f8caac4b9d165a80c6739f70e0fb7098b739c"
     },
     {
       "path": "libraries/base64.lua",
@@ -189,8 +189,8 @@
     },
     {
       "path": "main.lua",
-      "bytes": 38611,
-      "sha256": "4a292104b883b2af295aaf705c972fd9b60129827d7b0b73e9cd2fb0b86af445"
+      "bytes": 38623,
+      "sha256": "1dbd4d6cd255d1c6dafaeba5bbac017c74d21e924a1eb4a057fa406e127e9ad9"
     },
     {
       "path": "os.luau",
