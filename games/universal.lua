@@ -17,11 +17,11 @@ local function resolveRuntimeEnvironment()
 	return {}
 end
 local runtimeEnvironment = resolveRuntimeEnvironment()
-local vape = shared.BadVape
+local vape = shared.BVC
 local loadstring = function(...)
 	local res, err = loadstring(...)
 	if err and vape then
-		vape:CreateNotification('BadVape', 'Failed to load : ' .. err, 30, 'alert')
+		vape:CreateNotification('BVC', 'Failed to load : ' .. err, 30, 'alert')
 	end
 	return res
 end
@@ -34,12 +34,12 @@ local isfile = isfile
 	end
 local function downloadFile(path, func)
 	if not isfile(path) then
-		if shared.BadVapeDeveloper then
-			error('Missing local BadVape file: '..path)
+		if shared.BVCDeveloper then
+			error('Missing local BVC file: '..path)
 		end
 
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/' .. readfile('badvape/profiles/commit.txt') .. '/' .. select(1, path:gsub('badvape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/ezbrohack/bvc-v2/' .. readfile('bvc/profiles/commit.txt') .. '/' .. select(1, path:gsub('bvc/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -55,8 +55,8 @@ local run = function(func)
 	func()
 end
 local function queueTeleportPart(name, source)
-	if type(shared.BadVapeQueueTeleport) == 'function' then
-		return shared.BadVapeQueueTeleport(name, source)
+	if type(shared.BVCQueueTeleport) == 'function' then
+		return shared.BVCQueueTeleport(name, source)
 	end
 	return false
 end
@@ -89,7 +89,7 @@ local function serializeSessionInfo(objects)
 	end
 	local success, source = pcall(function()
 		local json = httpService:JSONEncode(saved)
-		return 'shared.BadVapeSessionInfo = '..httpService:JSONEncode(json)
+		return 'shared.BVCSessionInfo = '..httpService:JSONEncode(json)
 	end)
 	return success and type(source) == 'string' and source or nil
 end
@@ -216,17 +216,17 @@ end
 local visited, attempted, tpSwitch = {}, {}, false
 local cacheExpire, cache = tick()
 local function serverHop(pointer, filter)
-	if shared.BadVapeDeveloper then
-		notif('BadVape', 'Server hop is disabled in local offline mode.', 5, 'warning')
+	if shared.BVCDeveloper then
+		notif('BVC', 'Server hop is disabled in local offline mode.', 5, 'warning')
 		return
 	end
 
-	visited = shared.BadVapeServerHopList and shared.BadVapeServerHopList:split('/') or {}
+	visited = shared.BVCServerHopList and shared.BVCServerHopList:split('/') or {}
 	if not table.find(visited, game.JobId) then
 		table.insert(visited, game.JobId)
 	end
 	if not pointer then
-		notif('BadVape', 'Searching for an available server.', 2)
+		notif('BVC', 'Searching for an available server.', 2)
 	end
 
 	local suc, httpdata = pcall(function()
@@ -252,7 +252,7 @@ local function serverHop(pointer, filter)
 				cacheExpire, cache = tick() + 60, httpdata
 				table.insert(attempted, v.id)
 
-				notif('BadVape', 'Found! Teleporting.', 5)
+				notif('BVC', 'Found! Teleporting.', 5)
 				teleportService:TeleportToPlaceInstance(game.PlaceId, v.id)
 				return
 			end
@@ -261,7 +261,7 @@ local function serverHop(pointer, filter)
 		if data.nextPageCursor then
 			serverHop(data.nextPageCursor, filter)
 		else
-			notif('BadVape', 'Failed to find an available server.', 5, 'warning')
+			notif('BVC', 'Failed to find an available server.', 5, 'warning')
 		end
 	else
 		notif(
@@ -277,16 +277,16 @@ vape:Clean(lplr.OnTeleport:Connect(function()
 	if not tpSwitch then
 		tpSwitch = true
 		queueTeleportPart('20-server-hop',
-			"shared.BadVapeServerHopList = '"
+			"shared.BVCServerHopList = '"
 				.. table.concat(visited, '/')
-				.. "'\nshared.BadVapeServerHopPrevious = '"
+				.. "'\nshared.BVCServerHopPrevious = '"
 				.. game.JobId
 				.. "'"
 		)
 	end
 end))
 
-vape.Libraries.string = loadstring(downloadFile('badvape/libraries/string.lua'), 'string')()
+vape.Libraries.string = loadstring(downloadFile('bvc/libraries/string.lua'), 'string')()
 local frictionTable, oldfrict, entitylib = {}, {}
 local function updateVelocity()
 	if getTableSize(frictionTable) > 0 then
@@ -318,9 +318,9 @@ local function motorMove(target, cf)
 	task.delay(0, part.Destroy, part)
 end
 
-local hash = loadstring(downloadFile('badvape/libraries/hash.lua'), 'hash')()
-local prediction = loadstring(downloadFile('badvape/libraries/prediction.lua'), 'prediction')()
-entitylib = loadstring(downloadFile('badvape/libraries/entity.lua'), 'entitylibrary')()
+local hash = loadstring(downloadFile('bvc/libraries/hash.lua'), 'hash')()
+local prediction = loadstring(downloadFile('bvc/libraries/prediction.lua'), 'prediction')()
+entitylib = loadstring(downloadFile('bvc/libraries/entity.lua'), 'entitylibrary')()
 local whitelist = {
 	alreadychecked = {},
 	customtags = {},
@@ -338,7 +338,7 @@ local whitelist = {
 vape.Libraries.entity = entitylib
 run(function()
 	local suc, res = pcall(function()
-		local themeChunk = loadstring(downloadFile('badvape/libraries/badvape-theme.lua'), 'badvape-theme')
+		local themeChunk = loadstring(downloadFile('bvc/libraries/bvc-theme.lua'), 'bvc-theme')
 		if not themeChunk then
 			return
 		end
@@ -350,7 +350,7 @@ run(function()
 	end)
 
 	if not suc then
-		vape:CreateNotification('BadVape', 'Theme failed to load : ' .. tostring(res), 10, 'alert')
+		vape:CreateNotification('BVC', 'Theme failed to load : ' .. tostring(res), 10, 'alert')
 	end
 end)
 vape.Libraries.whitelist = whitelist
@@ -668,7 +668,7 @@ run(function()
 			if self.localprio == 0 then
 				olduninject = vape.Uninject
 				vape.Uninject = function()
-					notif('BadVape', 'No escaping the private members :)', 10)
+					notif('BVC', 'No escaping the private members :)', 10)
 				end
 			end
 		end
@@ -877,7 +877,7 @@ run(function()
 	end
 
 	function whitelist:update(first)
-		if shared.BadVapeDeveloper then
+		if shared.BVCDeveloper then
 			whitelist.loaded = true
 			return true
 		end
@@ -896,7 +896,7 @@ run(function()
 
 		if not first or whitelist.textdata ~= whitelist.olddata then
 			if not first then
-				whitelist.olddata = isfile('badvape/profiles/whitelist.json') and readfile('badvape/profiles/whitelist.json') or nil
+				whitelist.olddata = isfile('bvc/profiles/whitelist.json') and readfile('bvc/profiles/whitelist.json') or nil
 			end
 
 			local suc, res = pcall(function()
@@ -932,7 +932,7 @@ run(function()
 			if whitelist.textdata ~= whitelist.olddata then
 				whitelist.olddata = whitelist.textdata
 				pcall(function()
-					writefile('badvape/profiles/whitelist.json', whitelist.textdata)
+					writefile('bvc/profiles/whitelist.json', whitelist.textdata)
 				end)
 			end
 
@@ -1122,7 +1122,7 @@ run(function()
 			if self.localprio == 0 then
 				olduninject = vape.Uninject
 				vape.Uninject = function()
-					notif('BadVape', 'No escaping the private members :)', 10)
+					notif('BVC', 'No escaping the private members :)', 10)
 				end
 			end
 		end
@@ -1331,7 +1331,7 @@ run(function()
 	end
 
 	function whitelist:update(first)
-		if shared.BadVapeDeveloper then
+		if shared.BVCDeveloper then
 			whitelist.loaded = true
 			return true
 		end
@@ -1350,7 +1350,7 @@ run(function()
 
 		if not first or whitelist.textdata ~= whitelist.olddata then
 			if not first then
-				whitelist.olddata = isfile('badvape/profiles/whitelist.json') and readfile('badvape/profiles/whitelist.json') or nil
+				whitelist.olddata = isfile('bvc/profiles/whitelist.json') and readfile('bvc/profiles/whitelist.json') or nil
 			end
 
 			local suc, res = pcall(function()
@@ -1386,7 +1386,7 @@ run(function()
 			if whitelist.textdata ~= whitelist.olddata then
 				whitelist.olddata = whitelist.textdata
 				pcall(function()
-					writefile('badvape/profiles/whitelist.json', whitelist.textdata)
+					writefile('bvc/profiles/whitelist.json', whitelist.textdata)
 				end)
 			end
 		end
@@ -1512,7 +1512,7 @@ local mouseClicked
 local Fly
 local LongJump
 
-runtimeEnvironment.BadVapeUsedInit = true
+runtimeEnvironment.BVCUsedInit = true
 
 run(function()
 	local Radar
@@ -1733,9 +1733,9 @@ run(function()
 					end
 				end))
 
-				if shared.BadVapeSessionInfo then
+				if shared.BVCSessionInfo then
 					local success, restored = pcall(function()
-						return httpService:JSONDecode(shared.BadVapeSessionInfo)
+						return httpService:JSONDecode(shared.BVCSessionInfo)
 					end)
 					if success and type(restored) == 'table' then
 						for i, v in restored do
@@ -3477,7 +3477,7 @@ run(function()
     end
 
     local function isSigridMounted()
-        local resolver = runtimeEnvironment.BadVapeIsSigridMounted
+        local resolver = runtimeEnvironment.BVCIsSigridMounted
         if type(resolver) ~= 'function' then return false end
         local success, mounted = pcall(resolver)
         return success and mounted == true
@@ -7690,11 +7690,11 @@ run(function()
     	Function = function()
     		notif(
     			'ServerHop',
-			shared.BadVapeServerHopPrevious and 'Rejoining previous server...' or 'Cannot find previous server',
+			shared.BVCServerHopPrevious and 'Rejoining previous server...' or 'Cannot find previous server',
     			5
     		)
-		if shared.BadVapeServerHopPrevious then
-			teleportService:TeleportToPlaceInstance(game.PlaceId, shared.BadVapeServerHopPrevious)
+		if shared.BVCServerHopPrevious then
+			teleportService:TeleportToPlaceInstance(game.PlaceId, shared.BVCServerHopPrevious)
     		end
     	end,
     })
@@ -9218,7 +9218,7 @@ run(function()
     	end)
 
     	if not success or typeof(json) ~= 'table' then
-    		notif('BadVape', 'Invalid json format for fflag', 12, 'warning')
+    		notif('BVC', 'Invalid json format for fflag', 12, 'warning')
     		return
     	end
 
@@ -9226,7 +9226,7 @@ run(function()
     		pcall(setfflag, tostring(i), tostring(v))
     	end
 
-    	notif('BadVape', 'FFlags applied, Go in a new game to take effect', 12, 'info')
+    	notif('BVC', 'FFlags applied, Go in a new game to take effect', 12, 'info')
     end
 
     FFlag = vape.Legit:CreateModule({
@@ -9239,7 +9239,7 @@ run(function()
     		if call then
     			ChangeFFlag(true)
     		else
-    			notif('BadVape', 'Inorder to disable fflags you have applied, You need to restart roblox', 20, 'info')
+    			notif('BVC', 'Inorder to disable fflags you have applied, You need to restart roblox', 20, 'info')
     		end
     	end,
     })

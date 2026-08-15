@@ -13,7 +13,7 @@ local mainapi = {
 	ModuleRegistrationBatch = 0,
 	Modules = {},
 	ModuleCount = 0,
-	Place = shared.BadVapeProfilePlace or game.PlaceId,
+	Place = shared.BVCProfilePlace or game.PlaceId,
 	Profile = 'default',
 	Profiles = {},
 	RainbowSpeed = {Value = 1},
@@ -120,69 +120,69 @@ local uipallet = {
 }
 
 local getcustomassets = {
-	['badvape/assets/new/add.png'] = 'rbxassetid://14368300605',
-	['badvape/assets/new/alert.png'] = 'rbxassetid://14368301329',
-	['badvape/assets/new/allowedicon.png'] = 'rbxassetid://14368302000',
-	['badvape/assets/new/allowedtab.png'] = 'rbxassetid://14368302875',
-	['badvape/assets/new/arrowmodule.png'] = 'rbxassetid://14473354880',
-	['badvape/assets/new/back.png'] = 'rbxassetid://14368303894',
-	['badvape/assets/new/bind.png'] = 'rbxassetid://14368304734',
-	['badvape/assets/new/bindbkg.png'] = 'rbxassetid://14368305655',
-	['badvape/assets/new/blatanticon.png'] = 'rbxassetid://14368306745',
-	['badvape/assets/new/blockedicon.png'] = 'rbxassetid://14385669108',
-	['badvape/assets/new/blockedtab.png'] = 'rbxassetid://14385672881',
-	['badvape/assets/new/blur.png'] = 'rbxassetid://14898786664',
-	['badvape/assets/new/blurnotif.png'] = 'rbxassetid://16738720137',
-	['badvape/assets/new/close.png'] = 'rbxassetid://14368309446',
-	['badvape/assets/new/closemini.png'] = 'rbxassetid://14368310467',
-	['badvape/assets/new/colorpreview.png'] = 'rbxassetid://14368311578',
-	['badvape/assets/new/combaticon.png'] = 'rbxassetid://14368312652',
-	['badvape/assets/new/customsettings.png'] = 'rbxassetid://14403726449',
-	['badvape/assets/new/discord.png'] = '',
-	['badvape/assets/new/dots.png'] = 'rbxassetid://14368314459',
-	['badvape/assets/new/edit.png'] = 'rbxassetid://14368315443',
-	['badvape/assets/new/expandicon.png'] = 'rbxassetid://14368353032',
-	['badvape/assets/new/expandright.png'] = 'rbxassetid://14368316544',
-	['badvape/assets/new/expandup.png'] = 'rbxassetid://14368317595',
-	['badvape/assets/new/friendstab.png'] = 'rbxassetid://14397462778',
-	['badvape/assets/new/guisettings.png'] = 'rbxassetid://14368318994',
-	['badvape/assets/new/guislider.png'] = 'rbxassetid://14368320020',
-	['badvape/assets/new/guisliderrain.png'] = 'rbxassetid://14368321228',
-	['badvape/assets/new/guiv4.png'] = 'rbxassetid://14368322199',
-	['badvape/assets/new/guivape.png'] = 'rbxassetid://14657521312',
-	['badvape/assets/new/info.png'] = 'rbxassetid://14368324807',
-	['badvape/assets/new/inventoryicon.png'] = 'rbxassetid://14928011633',
-	['badvape/assets/new/legit.png'] = 'rbxassetid://14425650534',
-	['badvape/assets/new/legittab.png'] = 'rbxassetid://14426740825',
-	['badvape/assets/new/miniicon.png'] = 'rbxassetid://14368326029',
-	['badvape/assets/new/notification.png'] = 'rbxassetid://16738721069',
-	['badvape/assets/new/overlaysicon.png'] = 'rbxassetid://14368339581',
-	['badvape/assets/new/overlaystab.png'] = 'rbxassetid://14397380433',
-	['badvape/assets/new/pin.png'] = 'rbxassetid://14368342301',
-	['badvape/assets/new/profilesicon.png'] = 'rbxassetid://14397465323',
-	['badvape/assets/new/radaricon.png'] = 'rbxassetid://14368343291',
-	['badvape/assets/new/rainbow_1.png'] = 'rbxassetid://14368344374',
-	['badvape/assets/new/rainbow_2.png'] = 'rbxassetid://14368345149',
-	['badvape/assets/new/rainbow_3.png'] = 'rbxassetid://14368345840',
-	['badvape/assets/new/rainbow_4.png'] = 'rbxassetid://14368346696',
-	['badvape/assets/new/range.png'] = 'rbxassetid://14368347435',
-	['badvape/assets/new/rangearrow.png'] = 'rbxassetid://14368348640',
-	['badvape/assets/new/rendericon.png'] = 'rbxassetid://14368350193',
-	['badvape/assets/new/rendertab.png'] = 'rbxassetid://14397373458',
-	['badvape/assets/new/search.png'] = 'rbxassetid://14425646684',
-	['badvape/assets/new/targetinfoicon.png'] = 'rbxassetid://14368354234',
-	['badvape/assets/new/targetnpc1.png'] = 'rbxassetid://14497400332',
-	['badvape/assets/new/targetnpc2.png'] = 'rbxassetid://14497402744',
-	['badvape/assets/new/targetplayers1.png'] = 'rbxassetid://14497396015',
-	['badvape/assets/new/targetplayers2.png'] = 'rbxassetid://14497397862',
-	['badvape/assets/new/targetstab.png'] = 'rbxassetid://14497393895',
-	['badvape/assets/new/textguiicon.png'] = 'rbxassetid://14368355456',
-	['badvape/assets/new/textv4.png'] = 'rbxassetid://14368357095',
-	['badvape/assets/new/textvape.png'] = 'rbxassetid://14368358200',
-	['badvape/assets/new/utilityicon.png'] = 'rbxassetid://14368359107',
-	['badvape/assets/new/vape.png'] = 'rbxassetid://14373395239',
-	['badvape/assets/new/warning.png'] = 'rbxassetid://14368361552',
-	['badvape/assets/new/worldicon.png'] = 'rbxassetid://14368362492'
+	['bvc/assets/new/add.png'] = 'rbxassetid://14368300605',
+	['bvc/assets/new/alert.png'] = 'rbxassetid://14368301329',
+	['bvc/assets/new/allowedicon.png'] = 'rbxassetid://14368302000',
+	['bvc/assets/new/allowedtab.png'] = 'rbxassetid://14368302875',
+	['bvc/assets/new/arrowmodule.png'] = 'rbxassetid://14473354880',
+	['bvc/assets/new/back.png'] = 'rbxassetid://14368303894',
+	['bvc/assets/new/bind.png'] = 'rbxassetid://14368304734',
+	['bvc/assets/new/bindbkg.png'] = 'rbxassetid://14368305655',
+	['bvc/assets/new/blatanticon.png'] = 'rbxassetid://14368306745',
+	['bvc/assets/new/blockedicon.png'] = 'rbxassetid://14385669108',
+	['bvc/assets/new/blockedtab.png'] = 'rbxassetid://14385672881',
+	['bvc/assets/new/blur.png'] = 'rbxassetid://14898786664',
+	['bvc/assets/new/blurnotif.png'] = 'rbxassetid://16738720137',
+	['bvc/assets/new/close.png'] = 'rbxassetid://14368309446',
+	['bvc/assets/new/closemini.png'] = 'rbxassetid://14368310467',
+	['bvc/assets/new/colorpreview.png'] = 'rbxassetid://14368311578',
+	['bvc/assets/new/combaticon.png'] = 'rbxassetid://14368312652',
+	['bvc/assets/new/customsettings.png'] = 'rbxassetid://14403726449',
+	['bvc/assets/new/discord.png'] = '',
+	['bvc/assets/new/dots.png'] = 'rbxassetid://14368314459',
+	['bvc/assets/new/edit.png'] = 'rbxassetid://14368315443',
+	['bvc/assets/new/expandicon.png'] = 'rbxassetid://14368353032',
+	['bvc/assets/new/expandright.png'] = 'rbxassetid://14368316544',
+	['bvc/assets/new/expandup.png'] = 'rbxassetid://14368317595',
+	['bvc/assets/new/friendstab.png'] = 'rbxassetid://14397462778',
+	['bvc/assets/new/guisettings.png'] = 'rbxassetid://14368318994',
+	['bvc/assets/new/guislider.png'] = 'rbxassetid://14368320020',
+	['bvc/assets/new/guisliderrain.png'] = 'rbxassetid://14368321228',
+	['bvc/assets/new/guiv4.png'] = 'rbxassetid://14368322199',
+	['bvc/assets/new/guivape.png'] = 'rbxassetid://14657521312',
+	['bvc/assets/new/info.png'] = 'rbxassetid://14368324807',
+	['bvc/assets/new/inventoryicon.png'] = 'rbxassetid://14928011633',
+	['bvc/assets/new/legit.png'] = 'rbxassetid://14425650534',
+	['bvc/assets/new/legittab.png'] = 'rbxassetid://14426740825',
+	['bvc/assets/new/miniicon.png'] = 'rbxassetid://14368326029',
+	['bvc/assets/new/notification.png'] = 'rbxassetid://16738721069',
+	['bvc/assets/new/overlaysicon.png'] = 'rbxassetid://14368339581',
+	['bvc/assets/new/overlaystab.png'] = 'rbxassetid://14397380433',
+	['bvc/assets/new/pin.png'] = 'rbxassetid://14368342301',
+	['bvc/assets/new/profilesicon.png'] = 'rbxassetid://14397465323',
+	['bvc/assets/new/radaricon.png'] = 'rbxassetid://14368343291',
+	['bvc/assets/new/rainbow_1.png'] = 'rbxassetid://14368344374',
+	['bvc/assets/new/rainbow_2.png'] = 'rbxassetid://14368345149',
+	['bvc/assets/new/rainbow_3.png'] = 'rbxassetid://14368345840',
+	['bvc/assets/new/rainbow_4.png'] = 'rbxassetid://14368346696',
+	['bvc/assets/new/range.png'] = 'rbxassetid://14368347435',
+	['bvc/assets/new/rangearrow.png'] = 'rbxassetid://14368348640',
+	['bvc/assets/new/rendericon.png'] = 'rbxassetid://14368350193',
+	['bvc/assets/new/rendertab.png'] = 'rbxassetid://14397373458',
+	['bvc/assets/new/search.png'] = 'rbxassetid://14425646684',
+	['bvc/assets/new/targetinfoicon.png'] = 'rbxassetid://14368354234',
+	['bvc/assets/new/targetnpc1.png'] = 'rbxassetid://14497400332',
+	['bvc/assets/new/targetnpc2.png'] = 'rbxassetid://14497402744',
+	['bvc/assets/new/targetplayers1.png'] = 'rbxassetid://14497396015',
+	['bvc/assets/new/targetplayers2.png'] = 'rbxassetid://14497397862',
+	['bvc/assets/new/targetstab.png'] = 'rbxassetid://14497393895',
+	['bvc/assets/new/textguiicon.png'] = 'rbxassetid://14368355456',
+	['bvc/assets/new/textv4.png'] = 'rbxassetid://14368357095',
+	['bvc/assets/new/textvape.png'] = 'rbxassetid://14368358200',
+	['bvc/assets/new/utilityicon.png'] = 'rbxassetid://14368359107',
+	['bvc/assets/new/vape.png'] = 'rbxassetid://14373395239',
+	['bvc/assets/new/warning.png'] = 'rbxassetid://14368361552',
+	['bvc/assets/new/worldicon.png'] = 'rbxassetid://14368362492'
 }
 
 local isfile = isfile or function(file)
@@ -207,7 +207,7 @@ local function addBlur(parent, notif)
 	blur.Size = UDim2.new(1, 89, 1, 52)
 	blur.Position = UDim2.fromOffset(-48, -31)
 	blur.BackgroundTransparency = 1
-	blur.Image = getcustomasset('badvape/assets/new/'..(notif and 'blurnotif' or 'blur')..'.png')
+	blur.Image = getcustomasset('bvc/assets/new/'..(notif and 'blurnotif' or 'blur')..'.png')
 	blur.ScaleType = Enum.ScaleType.Slice
 	blur.SliceCenter = Rect.new(52, 31, 261, 502)
 	blur.Parent = parent
@@ -231,7 +231,7 @@ local function addCloseButton(parent, offset)
 	close.BackgroundColor3 = Color3.new(1, 1, 1)
 	close.BackgroundTransparency = 1
 	close.AutoButtonColor = false
-	close.Image = getcustomasset('badvape/assets/new/close.png')
+	close.Image = getcustomasset('bvc/assets/new/close.png')
 	close.ImageColor3 = color.Light(uipallet.Text, 0.2)
 	close.ImageTransparency = 0.5
 	close.Parent = parent
@@ -428,13 +428,13 @@ end
 
 local function downloadFile(path, func)
 	if not isfile(path) then
-		if shared.BadVapeDeveloper then
-			error('Missing local BadVape file: '..path)
+		if shared.BVCDeveloper then
+			error('Missing local BVC file: '..path)
 		end
 
 		createDownloader(path)
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/'..readfile('badvape/profiles/commit.txt')..'/'..select(1, path:gsub('badvape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/ezbrohack/bvc-v2/'..readfile('bvc/profiles/commit.txt')..'/'..select(1, path:gsub('bvc/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -548,7 +548,7 @@ local function removeTags(str)
 end
 
 do
-	local res = isfile('badvape/profiles/color.txt') and loadJson('badvape/profiles/color.txt')
+	local res = isfile('bvc/profiles/color.txt') and loadJson('bvc/profiles/color.txt')
 	if res then
 		uipallet.Main = res.Main and Color3.fromRGB(unpack(res.Main)) or uipallet.Main
 		uipallet.Text = res.Text and Color3.fromRGB(unpack(res.Text)) or uipallet.Text
@@ -835,7 +835,7 @@ components = {
 		preview.Size = UDim2.fromOffset(12, 12)
 		preview.Position = UDim2.new(1, -22, 0, 10)
 		preview.BackgroundTransparency = 1
-		preview.Image = getcustomasset('badvape/assets/new/colorpreview.png')
+		preview.Image = getcustomasset('bvc/assets/new/colorpreview.png')
 		preview.ImageColor3 = Color3.fromHSV(optionapi.Hue, optionapi.Sat, optionapi.Value)
 		preview.ImageTransparency = 1 - optionapi.Opacity
 		preview.Parent = slider
@@ -851,7 +851,7 @@ components = {
 		expand.Size = UDim2.fromOffset(9, 5)
 		expand.Position = UDim2.fromOffset(4, 4)
 		expand.BackgroundTransparency = 1
-		expand.Image = getcustomasset('badvape/assets/new/expandicon.png')
+		expand.Image = getcustomasset('bvc/assets/new/expandicon.png')
 		expand.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 		expand.Parent = expandbutton
 		local rainbow = Instance.new('TextButton')
@@ -864,17 +864,17 @@ components = {
 		local rainbow1 = Instance.new('ImageLabel')
 		rainbow1.Size = UDim2.fromOffset(12, 12)
 		rainbow1.BackgroundTransparency = 1
-		rainbow1.Image = getcustomasset('badvape/assets/new/rainbow_1.png')
+		rainbow1.Image = getcustomasset('bvc/assets/new/rainbow_1.png')
 		rainbow1.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		rainbow1.Parent = rainbow
 		local rainbow2 = rainbow1:Clone()
-		rainbow2.Image = getcustomasset('badvape/assets/new/rainbow_2.png')
+		rainbow2.Image = getcustomasset('bvc/assets/new/rainbow_2.png')
 		rainbow2.Parent = rainbow
 		local rainbow3 = rainbow1:Clone()
-		rainbow3.Image = getcustomasset('badvape/assets/new/rainbow_3.png')
+		rainbow3.Image = getcustomasset('bvc/assets/new/rainbow_3.png')
 		rainbow3.Parent = rainbow
 		local rainbow4 = rainbow1:Clone()
-		rainbow4.Image = getcustomasset('badvape/assets/new/rainbow_4.png')
+		rainbow4.Image = getcustomasset('bvc/assets/new/rainbow_4.png')
 		rainbow4.Parent = rainbow
 		local knobholder = Instance.new('Frame')
 		knobholder.Name = 'Knob'
@@ -1139,7 +1139,7 @@ components = {
 		arrow.Size = UDim2.fromOffset(4, 8)
 		arrow.Position = UDim2.new(1, -17, 0, 11)
 		arrow.BackgroundTransparency = 1
-		arrow.Image = getcustomasset('badvape/assets/new/expandright.png')
+		arrow.Image = getcustomasset('bvc/assets/new/expandright.png')
 		arrow.ImageColor3 = Color3.fromRGB(140, 140, 140)
 		arrow.Rotation = 90
 		arrow.Parent = button
@@ -1550,7 +1550,7 @@ components = {
 		icon.Size = UDim2.fromOffset(18, 12)
 		icon.Position = UDim2.fromOffset(10, 15)
 		icon.BackgroundTransparency = 1
-		icon.Image = getcustomasset('badvape/assets/new/targetstab.png')
+		icon.Image = getcustomasset('bvc/assets/new/targetstab.png')
 		icon.Parent = window
 		local title = Instance.new('TextLabel')
 		title.Name = 'Title'
@@ -1612,20 +1612,20 @@ components = {
 		
 		optionapi.Players = components.TargetsButton({
 			Position = UDim2.fromOffset(11, 45),
-			Icon = getcustomasset('badvape/assets/new/targetplayers1.png'),
+			Icon = getcustomasset('bvc/assets/new/targetplayers1.png'),
 			IconSize = UDim2.fromOffset(15, 16),
 			IconParent = tool,
-			ToolIcon = getcustomasset('badvape/assets/new/targetplayers2.png'),
+			ToolIcon = getcustomasset('bvc/assets/new/targetplayers2.png'),
 			ToolSize = UDim2.fromOffset(11, 12),
 			Tooltip = 'Players',
 			Function = optionsettings.Function
 		}, window, tool)
 		optionapi.NPCs = components.TargetsButton({
 			Position = UDim2.fromOffset(112, 45),
-			Icon = getcustomasset('badvape/assets/new/targetnpc1.png'),
+			Icon = getcustomasset('bvc/assets/new/targetnpc1.png'),
 			IconSize = UDim2.fromOffset(12, 16),
 			IconParent = tool,
-			ToolIcon = getcustomasset('badvape/assets/new/targetnpc2.png'),
+			ToolIcon = getcustomasset('bvc/assets/new/targetnpc2.png'),
 			ToolSize = UDim2.fromOffset(9, 12),
 			Tooltip = 'NPCs',
 			Function = optionsettings.Function
@@ -1909,7 +1909,7 @@ components = {
 		buttonicon.Size = UDim2.fromOffset(14, 12)
 		buttonicon.Position = UDim2.fromOffset(10, 14)
 		buttonicon.BackgroundTransparency = 1
-		buttonicon.Image = optionsettings.Icon or getcustomasset('badvape/assets/new/allowedicon.png')
+		buttonicon.Image = optionsettings.Icon or getcustomasset('bvc/assets/new/allowedicon.png')
 		buttonicon.Parent = button
 		local buttontitle = Instance.new('TextLabel')
 		buttontitle.Name = 'Title'
@@ -1955,7 +1955,7 @@ components = {
 		icon.Size = optionsettings.TabSize or UDim2.fromOffset(19, 16)
 		icon.Position = UDim2.fromOffset(10, 13)
 		icon.BackgroundTransparency = 1
-		icon.Image = optionsettings.Tab or getcustomasset('badvape/assets/new/allowedtab.png')
+		icon.Image = optionsettings.Tab or getcustomasset('bvc/assets/new/allowedtab.png')
 		icon.Parent = window
 		local title = Instance.new('TextLabel')
 		title.Name = 'Title'
@@ -1998,7 +1998,7 @@ components = {
 		addbutton.Size = UDim2.fromOffset(16, 16)
 		addbutton.Position = UDim2.new(1, -26, 0, 8)
 		addbutton.BackgroundTransparency = 1
-		addbutton.Image = getcustomasset('badvape/assets/new/add.png')
+		addbutton.Image = getcustomasset('bvc/assets/new/add.png')
 		addbutton.ImageColor3 = optionsettings.Color
 		addbutton.ImageTransparency = 0.3
 		addbutton.Parent = addbkg
@@ -2102,7 +2102,7 @@ components = {
 				close.BackgroundColor3 = Color3.new(1, 1, 1)
 				close.BackgroundTransparency = 1
 				close.AutoButtonColor = false
-				close.Image = getcustomasset('badvape/assets/new/closemini.png')
+				close.Image = getcustomasset('bvc/assets/new/closemini.png')
 				close.ImageColor3 = color.Light(uipallet.Text, 0.2)
 				close.ImageTransparency = 0.5
 				close.Parent = object
@@ -2286,8 +2286,8 @@ components = {
 			xpcall(function()
 				optionsettings.Function(self.Enabled)
 			end, function(err)
-				if shared.BadVapeDeveloper then
-					mainapi:CreateNotification('BadVape', 'gui error: '.. err, 15, 'warning')
+				if shared.BVCDeveloper then
+					mainapi:CreateNotification('BVC', 'gui error: '.. err, 15, 'warning')
 					task.defer(error, err)
 				end	
 			end)
@@ -2409,7 +2409,7 @@ components = {
 		knob.Position = UDim2.fromScale(0.5, 0.5)
 		knob.AnchorPoint = Vector2.new(0.5, 0.5)
 		knob.BackgroundTransparency = 1
-		knob.Image = getcustomasset('badvape/assets/new/range.png')
+		knob.Image = getcustomasset('bvc/assets/new/range.png')
 		knob.ImageColor3 = Color3.fromHSV(mainapi.GUIColor.Hue, mainapi.GUIColor.Sat, mainapi.GUIColor.Value)
 		knob.Parent = knobholder
 		local knobholdermax = knobholder:Clone()
@@ -2422,7 +2422,7 @@ components = {
 		arrow.Size = UDim2.fromOffset(12, 6)
 		arrow.Position = UDim2.new(1, -56, 0, 10)
 		arrow.BackgroundTransparency = 1
-		arrow.Image = getcustomasset('badvape/assets/new/rangearrow.png')
+		arrow.Image = getcustomasset('bvc/assets/new/rangearrow.png')
 		arrow.ImageColor3 = color.Light(uipallet.Main, 0.14)
 		arrow.Parent = slider
 		optionsettings.Function = optionsettings.Function or function() end
@@ -2641,7 +2641,7 @@ function mainapi:CreateGUI()
 	logo.Size = UDim2.fromOffset(62, 18)
 	logo.Position = UDim2.fromOffset(11, 10)
 	logo.BackgroundTransparency = 1
-	logo.Image = getcustomasset('badvape/assets/new/guivape.png')
+	logo.Image = getcustomasset('bvc/assets/new/guivape.png')
 	logo.ImageColor3 = select(3, uipallet.Main:ToHSV()) > 0.5 and uipallet.Text or Color3.new(1, 1, 1)
 	logo.Parent = window
 	local logov4 = Instance.new('ImageLabel')
@@ -2649,7 +2649,7 @@ function mainapi:CreateGUI()
 	logov4.Size = UDim2.fromOffset(28, 16)
 	logov4.Position = UDim2.new(1, 1, 0, 1)
 	logov4.BackgroundTransparency = 1
-	logov4.Image = getcustomasset('badvape/assets/new/guiv4.png')
+	logov4.Image = getcustomasset('bvc/assets/new/guiv4.png')
 	logov4.Parent = logo
 	local children = Instance.new('Frame')
 	children.Name = 'Children'
@@ -2673,14 +2673,14 @@ function mainapi:CreateGUI()
 	settingsicon.Size = UDim2.fromOffset(14, 14)
 	settingsicon.Position = UDim2.fromOffset(15, 12)
 	settingsicon.BackgroundTransparency = 1
-	settingsicon.Image = getcustomasset('badvape/assets/new/guisettings.png')
+	settingsicon.Image = getcustomasset('bvc/assets/new/guisettings.png')
 	settingsicon.ImageColor3 = color.Light(uipallet.Main, 0.37)
 	settingsicon.Parent = settingsbutton
 	local discordbutton = Instance.new('ImageButton')
 	discordbutton.Size = UDim2.fromOffset(16, 16)
 	discordbutton.Position = UDim2.new(1, -56, 0, 11)
 	discordbutton.BackgroundTransparency = 1
-	discordbutton.Image = getcustomasset('badvape/assets/new/discord.png')
+	discordbutton.Image = getcustomasset('bvc/assets/new/discord.png')
 	discordbutton.Parent = window
 	addTooltip(discordbutton, 'Join discord')
 	local settingspane = Instance.new('TextButton')
@@ -2707,7 +2707,7 @@ function mainapi:CreateGUI()
 	back.Size = UDim2.fromOffset(16, 16)
 	back.Position = UDim2.fromOffset(11, 13)
 	back.BackgroundTransparency = 1
-	back.Image = getcustomasset('badvape/assets/new/back.png')
+	back.Image = getcustomasset('bvc/assets/new/back.png')
 	back.ImageColor3 = color.Light(uipallet.Main, 0.37)
 	back.Parent = settingspane
 	local settingsversion = Instance.new('TextLabel')
@@ -2715,8 +2715,8 @@ function mainapi:CreateGUI()
 	settingsversion.Size = UDim2.new(1, 0, 0, 16)
 	settingsversion.Position = UDim2.new(0, 0, 1, -16)
 	settingsversion.BackgroundTransparency = 1
-	settingsversion.Text = 'BadVape '..mainapi.Version..' '..(
-		isfile('badvape/profiles/commit.txt') and readfile('badvape/profiles/commit.txt'):sub(1, 6) or ''
+	settingsversion.Text = 'BVC '..mainapi.Version..' '..(
+		isfile('bvc/profiles/commit.txt') and readfile('bvc/profiles/commit.txt'):sub(1, 6) or ''
 	)..' '
 	settingsversion.TextColor3 = color.Dark(uipallet.Text, 0.43)
 	settingsversion.TextXAlignment = Enum.TextXAlignment.Right
@@ -2770,7 +2770,7 @@ function mainapi:CreateGUI()
 		icon.Size = UDim2.fromOffset(12, 12)
 		icon.Position = UDim2.new(0.5, -6, 0, 5)
 		icon.BackgroundTransparency = 1
-		icon.Image = getcustomasset('badvape/assets/new/bind.png')
+		icon.Image = getcustomasset('bvc/assets/new/bind.png')
 		icon.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 		icon.Parent = bind
 		local label = Instance.new('TextLabel')
@@ -2803,13 +2803,13 @@ function mainapi:CreateGUI()
 		bind.MouseEnter:Connect(function()
 			label.Visible = false
 			icon.Visible = not label.Visible
-			icon.Image = getcustomasset('badvape/assets/new/edit.png')
+			icon.Image = getcustomasset('bvc/assets/new/edit.png')
 			icon.ImageColor3 = color.Dark(uipallet.Text, 0.16)
 		end)
 		bind.MouseLeave:Connect(function()
 			label.Visible = true
 			icon.Visible = not label.Visible
-			icon.Image = getcustomasset('badvape/assets/new/bind.png')
+			icon.Image = getcustomasset('bvc/assets/new/bind.png')
 			icon.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 		end)
 		bind.MouseButton1Click:Connect(function()
@@ -2870,7 +2870,7 @@ function mainapi:CreateGUI()
 		arrow.Size = UDim2.fromOffset(4, 8)
 		arrow.Position = UDim2.new(1, -20, 0, 16)
 		arrow.BackgroundTransparency = 1
-		arrow.Image = getcustomasset('badvape/assets/new/expandright.png')
+		arrow.Image = getcustomasset('bvc/assets/new/expandright.png')
 		arrow.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		arrow.Parent = button
 		optionapi.Name = categorysettings.Name
@@ -2932,7 +2932,7 @@ function mainapi:CreateGUI()
 		button.Position = UDim2.new(1, -29, 0, 7)
 		button.BackgroundTransparency = 1
 		button.AutoButtonColor = false
-		button.Image = getcustomasset('badvape/assets/new/overlaysicon.png')
+		button.Image = getcustomasset('bvc/assets/new/overlaysicon.png')
 		button.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		button.Parent = bar
 		addCorner(button, UDim.new(1, 0))
@@ -2959,7 +2959,7 @@ function mainapi:CreateGUI()
 		icon.Size = UDim2.fromOffset(14, 12)
 		icon.Position = UDim2.fromOffset(10, 13)
 		icon.BackgroundTransparency = 1
-		icon.Image = getcustomasset('badvape/assets/new/overlaystab.png')
+		icon.Image = getcustomasset('bvc/assets/new/overlaystab.png')
 		icon.ImageColor3 = uipallet.Text
 		icon.Parent = window
 		local title = Instance.new('TextLabel')
@@ -3151,7 +3151,7 @@ function mainapi:CreateGUI()
 		arrow.Size = UDim2.fromOffset(4, 8)
 		arrow.Position = UDim2.new(1, -20, 0, 16)
 		arrow.BackgroundTransparency = 1
-		arrow.Image = getcustomasset('badvape/assets/new/expandright.png')
+		arrow.Image = getcustomasset('bvc/assets/new/expandright.png')
 		arrow.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		arrow.Parent = button
 		local settingspane = Instance.new('TextButton')
@@ -3178,7 +3178,7 @@ function mainapi:CreateGUI()
 		back.Size = UDim2.fromOffset(16, 16)
 		back.Position = UDim2.fromOffset(11, 13)
 		back.BackgroundTransparency = 1
-		back.Image = getcustomasset('badvape/assets/new/back.png')
+		back.Image = getcustomasset('bvc/assets/new/back.png')
 		back.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		back.Parent = settingspane
 		addCorner(settingspane)
@@ -3426,7 +3426,7 @@ function mainapi:CreateGUI()
 		preview.Size = UDim2.fromOffset(12, 12)
 		preview.Position = UDim2.new(1, -22, 0, 10)
 		preview.BackgroundTransparency = 1
-		preview.Image = getcustomasset('badvape/assets/new/colorpreview.png')
+		preview.Image = getcustomasset('bvc/assets/new/colorpreview.png')
 		preview.ImageColor3 = Color3.fromHSV(optionapi.Hue, 1, 1)
 		preview.Parent = slider
 		local valuebox = Instance.new('TextBox')
@@ -3454,7 +3454,7 @@ function mainapi:CreateGUI()
 		expandicon.Size = UDim2.fromOffset(9, 5)
 		expandicon.Position = UDim2.fromOffset(4, 4)
 		expandicon.BackgroundTransparency = 1
-		expandicon.Image = getcustomasset('badvape/assets/new/expandicon.png')
+		expandicon.Image = getcustomasset('bvc/assets/new/expandicon.png')
 		expandicon.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 		expandicon.Parent = expandbutton
 		local rainbow = Instance.new('TextButton')
@@ -3467,24 +3467,24 @@ function mainapi:CreateGUI()
 		local rainbow1 = Instance.new('ImageLabel')
 		rainbow1.Size = UDim2.fromOffset(12, 12)
 		rainbow1.BackgroundTransparency = 1
-		rainbow1.Image = getcustomasset('badvape/assets/new/rainbow_1.png')
+		rainbow1.Image = getcustomasset('bvc/assets/new/rainbow_1.png')
 		rainbow1.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		rainbow1.Parent = rainbow
 		local rainbow2 = rainbow1:Clone()
-		rainbow2.Image = getcustomasset('badvape/assets/new/rainbow_2.png')
+		rainbow2.Image = getcustomasset('bvc/assets/new/rainbow_2.png')
 		rainbow2.Parent = rainbow
 		local rainbow3 = rainbow1:Clone()
-		rainbow3.Image = getcustomasset('badvape/assets/new/rainbow_3.png')
+		rainbow3.Image = getcustomasset('bvc/assets/new/rainbow_3.png')
 		rainbow3.Parent = rainbow
 		local rainbow4 = rainbow1:Clone()
-		rainbow4.Image = getcustomasset('badvape/assets/new/rainbow_4.png')
+		rainbow4.Image = getcustomasset('bvc/assets/new/rainbow_4.png')
 		rainbow4.Parent = rainbow
 		local knob = Instance.new('ImageLabel')
 		knob.Name = 'Knob'
 		knob.Size = UDim2.fromOffset(26, 12)
 		knob.Position = UDim2.fromOffset(slidercolorpos[4] - 3, -5)
 		knob.BackgroundTransparency = 1
-		knob.Image = getcustomasset('badvape/assets/new/guislider.png')
+		knob.Image = getcustomasset('bvc/assets/new/guislider.png')
 		knob.ImageColor3 = slidercolors[4]
 		knob.Parent = holder
 		optionsettings.Function = optionsettings.Function or function() end
@@ -3501,8 +3501,8 @@ function mainapi:CreateGUI()
 			ColorSequenceKeypoint.new(0, Color3.fromHSV(0, 0, 0)),
 			ColorSequenceKeypoint.new(1, Color3.fromHSV(optionapi.Hue, optionapi.Sat, 1))
 		}))
-		local normalknob = getcustomasset('badvape/assets/new/guislider.png')
-		local rainbowknob = getcustomasset('badvape/assets/new/guisliderrain.png')
+		local normalknob = getcustomasset('bvc/assets/new/guislider.png')
+		local rainbowknob = getcustomasset('bvc/assets/new/guisliderrain.png')
 		local rainbowthread
 
 		function optionapi:Save(tab)
@@ -3720,7 +3720,7 @@ function mainapi:CreateGUI()
 		settingspane.Visible = false
 	end)
 	discordbutton.MouseButton1Click:Connect(function()
-		tooltip.Text = 'BadVape local build'
+		tooltip.Text = 'BVC local build'
 	end)
 	settingsbutton.MouseEnter:Connect(function()
 		settingsicon.ImageColor3 = uipallet.Text
@@ -3797,7 +3797,7 @@ function mainapi:CreateCategory(categorysettings)
 	arrow.Size = UDim2.fromOffset(9, 4)
 	arrow.Position = UDim2.fromOffset(20, 18)
 	arrow.BackgroundTransparency = 1
-	arrow.Image = getcustomasset('badvape/assets/new/expandup.png')
+	arrow.Image = getcustomasset('bvc/assets/new/expandup.png')
 	arrow.ImageColor3 = Color3.fromRGB(140, 140, 140)
 	arrow.Rotation = 180
 	arrow.Parent = arrowbutton
@@ -3925,7 +3925,7 @@ function mainapi:CreateCategory(categorysettings)
 		bindicon.Size = UDim2.fromOffset(12, 12)
 		bindicon.Position = UDim2.new(0.5, -6, 0, 5)
 		bindicon.BackgroundTransparency = 1
-		bindicon.Image = getcustomasset('badvape/assets/new/bind.png')
+		bindicon.Image = getcustomasset('bvc/assets/new/bind.png')
 		bindicon.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 		bindicon.Parent = bind
 		local bindtext = Instance.new('TextLabel')
@@ -3943,7 +3943,7 @@ function mainapi:CreateCategory(categorysettings)
 		bindcover.Size = UDim2.fromOffset(154, 40)
 		bindcover.BackgroundTransparency = 1
 		bindcover.Visible = false
-		bindcover.Image = getcustomasset('badvape/assets/new/bindbkg.png')
+		bindcover.Image = getcustomasset('bvc/assets/new/bindbkg.png')
 		bindcover.ScaleType = Enum.ScaleType.Slice
 		bindcover.SliceCenter = Rect.new(0, 0, 141, 40)
 		bindcover.Parent = modulebutton
@@ -3969,7 +3969,7 @@ function mainapi:CreateCategory(categorysettings)
 		dots.Size = UDim2.fromOffset(3, 16)
 		dots.Position = UDim2.fromOffset(4, 12)
 		dots.BackgroundTransparency = 1
-		dots.Image = getcustomasset('badvape/assets/new/dots.png')
+		dots.Image = getcustomasset('bvc/assets/new/dots.png')
 		dots.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		dots.Parent = dotsbutton
 		modulechildren.Name = modulesettings.Name..'Children'
@@ -4056,13 +4056,13 @@ function mainapi:CreateCategory(categorysettings)
 		bind.MouseEnter:Connect(function()
 			bindtext.Visible = false
 			bindicon.Visible = not bindtext.Visible
-			bindicon.Image = getcustomasset('badvape/assets/new/edit.png')
+			bindicon.Image = getcustomasset('bvc/assets/new/edit.png')
 			if not moduleapi.Enabled then bindicon.ImageColor3 = color.Dark(uipallet.Text, 0.16) end
 		end)
 		bind.MouseLeave:Connect(function()
 			bindtext.Visible = #moduleapi.Bind > 0
 			bindicon.Visible = not bindtext.Visible
-			bindicon.Image = getcustomasset('badvape/assets/new/bind.png')
+			bindicon.Image = getcustomasset('bvc/assets/new/bind.png')
 			if not moduleapi.Enabled then
 				bindicon.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 			end
@@ -4293,7 +4293,7 @@ function mainapi:CreateOverlay(categorysettings)
 	pin.Position = UDim2.new(1, -47, 0, 12)
 	pin.BackgroundTransparency = 1
 	pin.AutoButtonColor = false
-	pin.Image = getcustomasset('badvape/assets/new/pin.png')
+	pin.Image = getcustomasset('bvc/assets/new/pin.png')
 	pin.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 	pin.Parent = window
 	local dotsbutton = Instance.new('TextButton')
@@ -4308,7 +4308,7 @@ function mainapi:CreateOverlay(categorysettings)
 	dots.Size = UDim2.fromOffset(3, 16)
 	dots.Position = UDim2.fromOffset(4, 12)
 	dots.BackgroundTransparency = 1
-	dots.Image = getcustomasset('badvape/assets/new/dots.png')
+	dots.Image = getcustomasset('bvc/assets/new/dots.png')
 	dots.ImageColor3 = color.Light(uipallet.Main, 0.37)
 	dots.Parent = dotsbutton
 	local customchildren = Instance.new('Frame')
@@ -4478,7 +4478,7 @@ function mainapi:CreateCategoryList(categorysettings)
 	arrow.Size = UDim2.fromOffset(9, 4)
 	arrow.Position = UDim2.fromOffset(20, 19)
 	arrow.BackgroundTransparency = 1
-	arrow.Image = getcustomasset('badvape/assets/new/expandup.png')
+	arrow.Image = getcustomasset('bvc/assets/new/expandup.png')
 	arrow.ImageColor3 = Color3.fromRGB(140, 140, 140)
 	arrow.Rotation = 180
 	arrow.Parent = arrowbutton
@@ -4511,7 +4511,7 @@ function mainapi:CreateCategoryList(categorysettings)
 	settings.BackgroundTransparency = 1
 	settings.AutoButtonColor = false
 	settings.Visible = not categorysettings.InlineOptions
-	settings.Image = getcustomasset('badvape/assets/new/customsettings.png')
+	settings.Image = getcustomasset('bvc/assets/new/customsettings.png')
 	settings.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 	settings.Parent = window
 	local divider = Instance.new('Frame')
@@ -4561,7 +4561,7 @@ function mainapi:CreateCategoryList(categorysettings)
 	addbutton.Size = UDim2.fromOffset(16, 16)
 	addbutton.Position = UDim2.new(1, -26, 0, 8)
 	addbutton.BackgroundTransparency = 1
-	addbutton.Image = getcustomasset('badvape/assets/new/add.png')
+	addbutton.Image = getcustomasset('bvc/assets/new/add.png')
 	addbutton.ImageColor3 = categorysettings.Color
 	addbutton.ImageTransparency = 0.3
 	addbutton.Parent = addbkg
@@ -4578,8 +4578,8 @@ function mainapi:CreateCategoryList(categorysettings)
 				if ind then
 					if val ~= 'default' then
 						table.remove(mainapi.Profiles, ind)
-						if isfile('badvape/profiles/'..val..mainapi.Place..'.txt') and delfile then
-							delfile('badvape/profiles/'..val..mainapi.Place..'.txt')
+						if isfile('bvc/profiles/'..val..mainapi.Place..'.txt') and delfile then
+							delfile('bvc/profiles/'..val..mainapi.Place..'.txt')
 						end
 					end
 				else
@@ -4645,7 +4645,7 @@ function mainapi:CreateCategoryList(categorysettings)
 				dots.Size = UDim2.fromOffset(3, 16)
 				dots.Position = UDim2.fromOffset(10, 9)
 				dots.BackgroundTransparency = 1
-				dots.Image = getcustomasset('badvape/assets/new/dots.png')
+				dots.Image = getcustomasset('bvc/assets/new/dots.png')
 				dots.ImageColor3 = color.Light(uipallet.Main, 0.37)
 				dots.Parent = dotsbutton
 				local bind = Instance.new('TextButton')
@@ -4666,7 +4666,7 @@ function mainapi:CreateCategoryList(categorysettings)
 				bindicon.Size = UDim2.fromOffset(12, 12)
 				bindicon.Position = UDim2.new(0.5, -6, 0, 5)
 				bindicon.BackgroundTransparency = 1
-				bindicon.Image = getcustomasset('badvape/assets/new/bind.png')
+				bindicon.Image = getcustomasset('bvc/assets/new/bind.png')
 				bindicon.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 				bindicon.Parent = bind
 				local bindtext = Instance.new('TextLabel')
@@ -4682,7 +4682,7 @@ function mainapi:CreateCategoryList(categorysettings)
 				bind.MouseEnter:Connect(function()
 					bindtext.Visible = false
 					bindicon.Visible = not bindtext.Visible
-					bindicon.Image = getcustomasset('badvape/assets/new/edit.png')
+					bindicon.Image = getcustomasset('bvc/assets/new/edit.png')
 					if v.Name ~= mainapi.Profile then
 						bindicon.ImageColor3 = color.Dark(uipallet.Text, 0.16)
 					end
@@ -4690,7 +4690,7 @@ function mainapi:CreateCategoryList(categorysettings)
 				bind.MouseLeave:Connect(function()
 					bindtext.Visible = #v.Bind > 0
 					bindicon.Visible = not bindtext.Visible
-					bindicon.Image = getcustomasset('badvape/assets/new/bind.png')
+					bindicon.Image = getcustomasset('bvc/assets/new/bind.png')
 					if v.Name ~= mainapi.Profile then
 						bindicon.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 					end
@@ -4700,7 +4700,7 @@ function mainapi:CreateCategoryList(categorysettings)
 				bindcover.Size = UDim2.fromOffset(154, 33)
 				bindcover.BackgroundTransparency = 1
 				bindcover.Visible = false
-				bindcover.Image = getcustomasset('badvape/assets/new/bindbkg.png')
+				bindcover.Image = getcustomasset('bvc/assets/new/bindbkg.png')
 				bindcover.ScaleType = Enum.ScaleType.Slice
 				bindcover.SliceCenter = Rect.new(0, 0, 141, 40)
 				bindcover.Parent = object
@@ -4836,7 +4836,7 @@ function mainapi:CreateCategoryList(categorysettings)
 				close.BackgroundColor3 = Color3.new(1, 1, 1)
 				close.BackgroundTransparency = 1
 				close.AutoButtonColor = false
-				close.Image = getcustomasset('badvape/assets/new/closemini.png')
+				close.Image = getcustomasset('bvc/assets/new/closemini.png')
 				close.ImageColor3 = color.Light(uipallet.Text, 0.2)
 				close.ImageTransparency = 0.5
 				close.Parent = object
@@ -5013,7 +5013,7 @@ function mainapi:CreateSearch()
 	searchicon.Size = UDim2.fromOffset(14, 14)
 	searchicon.Position = UDim2.new(1, -23, 0, 11)
 	searchicon.BackgroundTransparency = 1
-	searchicon.Image = getcustomasset('badvape/assets/new/search.png')
+	searchicon.Image = getcustomasset('bvc/assets/new/search.png')
 	searchicon.ImageColor3 = color.Light(uipallet.Main, 0.37)
 	searchicon.ZIndex = 102
 	searchicon.Parent = searchbkg
@@ -5022,7 +5022,7 @@ function mainapi:CreateSearch()
 	legiticon.Size = UDim2.fromOffset(29, 16)
 	legiticon.Position = UDim2.fromOffset(8, 11)
 	legiticon.BackgroundTransparency = 1
-	legiticon.Image = getcustomasset('badvape/assets/new/legit.png')
+	legiticon.Image = getcustomasset('bvc/assets/new/legit.png')
 	legiticon.ZIndex = 102
 	legiticon.Parent = searchbkg
 	local legitdivider = Instance.new('Frame')
@@ -5201,7 +5201,7 @@ function mainapi:CreateLegit()
 	icon.Size = UDim2.fromOffset(16, 16)
 	icon.Position = UDim2.fromOffset(18, 13)
 	icon.BackgroundTransparency = 1
-	icon.Image = getcustomasset('badvape/assets/new/legittab.png')
+	icon.Image = getcustomasset('bvc/assets/new/legittab.png')
 	icon.ImageColor3 = uipallet.Text
 	icon.Parent = window
 	local close = addCloseButton(window)
@@ -5250,7 +5250,7 @@ function mainapi:CreateLegit()
 	searchicon.BackgroundTransparency = 1
 	searchicon.Position = UDim2.new(1, -28, 0, 8)
 	searchicon.Size = UDim2.fromOffset(12, 12)
-	searchicon.Image = getcustomasset('badvape/assets/new/search.png')
+	searchicon.Image = getcustomasset('bvc/assets/new/search.png')
 	searchicon.ImageColor3 = color.Light(uipallet.Main, 0.37)
 	searchicon.Parent = searchbox
 	local categorylist = Instance.new('Frame')
@@ -5387,7 +5387,7 @@ function mainapi:CreateLegit()
 		dots.Size = UDim2.fromOffset(2, 12)
 		dots.Position = UDim2.fromOffset(6, 6)
 		dots.BackgroundTransparency = 1
-		dots.Image = getcustomasset('badvape/assets/new/dots.png')
+		dots.Image = getcustomasset('bvc/assets/new/dots.png')
 		dots.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		dots.Parent = dotsbutton
 		local shadow = Instance.new('TextButton')
@@ -5424,7 +5424,7 @@ function mainapi:CreateLegit()
 		back.Size = UDim2.fromOffset(16, 16)
 		back.Position = UDim2.fromOffset(11, 13)
 		back.BackgroundTransparency = 1
-		back.Image = getcustomasset('badvape/assets/new/back.png')
+		back.Image = getcustomasset('bvc/assets/new/back.png')
 		back.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		back.Parent = settingspane
 		addCorner(settingspane)
@@ -5626,7 +5626,7 @@ function mainapi:CreateNotification(title, text, duration, type)
 				Body = httpService:JSONEncode({
 					content = '',
 					embeds = {{
-						title = title or "BadVape",
+						title = title or "BVC",
 						description = removeTags(text or "None"),
 						color = tonumber(color:ToHex(), 16),
 						timestamp = os.date('%Y-%m-%dT%X.000Z'),
@@ -5649,7 +5649,7 @@ function mainapi:CreateNotification(title, text, duration, type)
 		notification.Position = UDim2.new(1, 0, 1, -(29 + (78 * i)))
 		notification.ZIndex = 5
 		notification.BackgroundTransparency = 1
-		notification.Image = getcustomasset('badvape/assets/new/notification.png')
+		notification.Image = getcustomasset('bvc/assets/new/notification.png')
 		notification.ScaleType = Enum.ScaleType.Slice
 		notification.SliceCenter = Rect.new(7, 7, 9, 9)
 		notification.Parent = notifications
@@ -5660,7 +5660,7 @@ function mainapi:CreateNotification(title, text, duration, type)
 		iconshadow.Position = UDim2.fromOffset(-5, -8)
 		iconshadow.ZIndex = 5
 		iconshadow.BackgroundTransparency = 1
-		iconshadow.Image = getcustomasset('badvape/assets/new/'..(type or 'info')..'.png')
+		iconshadow.Image = getcustomasset('bvc/assets/new/'..(type or 'info')..'.png')
 		iconshadow.ImageColor3 = Color3.new()
 		iconshadow.ImageTransparency = 0.5
 		iconshadow.Parent = notification
@@ -5772,12 +5772,12 @@ function mainapi:Load(skipgui, profile)
 	local guidata = {}
 	local savecheck = true
 
-	if isfile('badvape/profiles/'..game.GameId..'.gui.txt') then
-		guidata = loadJson('badvape/profiles/'..game.GameId..'.gui.txt')
+	if isfile('bvc/profiles/'..game.GameId..'.gui.txt') then
+		guidata = loadJson('bvc/profiles/'..game.GameId..'.gui.txt')
 		if not guidata then
 			guidata = {Categories = {}}
-			self:CreateNotification('BadVape', 'Failed to load GUI settings, Try rejoining ur game', 10, 'alert')
-			delfile('badvape/profiles/'..game.GameId..'.gui.txt')
+			self:CreateNotification('BVC', 'Failed to load GUI settings, Try rejoining ur game', 10, 'alert')
+			delfile('bvc/profiles/'..game.GameId..'.gui.txt')
 			savecheck = false
 		end
 		guidata.Categories = profileTable(guidata.Categories)
@@ -5827,11 +5827,11 @@ function mainapi:Load(skipgui, profile)
 		self.ProfileLabel.Size = UDim2.fromOffset(getfontsize(self.ProfileLabel.Text, self.ProfileLabel.TextSize, self.ProfileLabel.Font).X + 16, 24)
 	end
 
-	if isfile('badvape/profiles/'..self.Profile..self.Place..'.txt') then
-		local savedata = loadJson('badvape/profiles/'..self.Profile..self.Place..'.txt')
+	if isfile('bvc/profiles/'..self.Profile..self.Place..'.txt') then
+		local savedata = loadJson('bvc/profiles/'..self.Profile..self.Place..'.txt')
 		if not savedata then
 			savedata = {Categories = {}, Modules = {}, Legit = {}}
-			self:CreateNotification('BadVape', 'Failed to load '..self.Profile..' profile.', 10, 'alert')
+			self:CreateNotification('BVC', 'Failed to load '..self.Profile..' profile.', 10, 'alert')
 			savecheck = false
 		end
 		savedata.Categories = profileTable(savedata.Categories)
@@ -5924,8 +5924,8 @@ function mainapi:Load(skipgui, profile)
 	self.Loaded = savecheck
 	self.Categories.Main.Options.Bind:SetBind(self.Keybind)
 
-	if not inputService.KeyboardEnabled or shared.BadVapeDeveloper then
-		local hide = isfile('badvape/profiles/hide.txt') and readfile('badvape/profiles/hide.txt') or nil
+	if not inputService.KeyboardEnabled or shared.BVCDeveloper then
+		local hide = isfile('bvc/profiles/hide.txt') and readfile('bvc/profiles/hide.txt') or nil
 		if hide ~= nil then
 			hide = hide == 'true' and true or false
 		end
@@ -5941,7 +5941,7 @@ function mainapi:Load(skipgui, profile)
 		local topBarApp = topBarGui and topBarGui:FindFirstChild('TopBarApp')
 		button.Parent = topBarApp or gui
 		if game.GameId == 2619619496 and not topBarApp then
-			-- Delta can finish BadVape startup before the lobby replicates its
+			-- Delta can finish BVC startup before the lobby replicates its
 			-- TopBarAppGui. Keep the button usable in our GUI and reparent it later;
 			-- a missing optional Roblox UI must never abort the whole runtime.
 			task.spawn(function()
@@ -5958,7 +5958,7 @@ function mainapi:Load(skipgui, profile)
 		image.Size = UDim2.fromOffset(22, 22)
 		image.Position = UDim2.fromScale(0.5, 0.5)
 		image.BackgroundTransparency = 1
-		image.Image = getcustomasset('badvape/assets/new/vape.png')
+		image.Image = getcustomasset('bvc/assets/new/vape.png')
 		image.ImageTransparency = hide and 1 or 0
 		image.Parent = button
 		local buttoncorner = Instance.new('UICorner')
@@ -5984,12 +5984,12 @@ function mainapi:Load(skipgui, profile)
 
 		if guipane then
 			guipane:CreateToggle({
-				Name = 'Hide BadVape button',
+				Name = 'Hide BVC button',
 				Default = hide or false,
 				Function = function(call)
 					button.BackgroundTransparency = call and 1 or 0.35
 					image.ImageTransparency = call and 1 or 0
-					writefile('badvape/profiles/hide.txt', tostring(call))
+					writefile('bvc/profiles/hide.txt', tostring(call))
 				end
 			})
 		end
@@ -6084,8 +6084,8 @@ function mainapi:Save(newprofile)
 		}
 	end
 
-	writefile('badvape/profiles/'..game.GameId..'.gui.txt', httpService:JSONEncode(guidata))
-	writefile('badvape/profiles/'..self.Profile..self.Place..'.txt', httpService:JSONEncode(savedata))
+	writefile('bvc/profiles/'..game.GameId..'.gui.txt', httpService:JSONEncode(guidata))
+	writefile('bvc/profiles/'..self.Profile..self.Place..'.txt', httpService:JSONEncode(savedata))
 end
 
 function mainapi:SaveOptions(object, savedoptions)
@@ -6107,7 +6107,7 @@ function mainapi:Uninject()
 	-- handlers commonly wait on this value and must not start new work during
 	-- teardown.
 	mainapi.Loaded = nil
-	local reloadRequested = shared.BadVapeReload == true
+	local reloadRequested = shared.BVCReload == true
 
 	-- Persistence is useful, but a corrupt option or a partially destroyed GUI
 	-- must never prevent hooks and connections from being released.
@@ -6168,14 +6168,14 @@ function mainapi:Uninject()
 	mainapi.Uninjecting = false
 	mainapi.Uninjected = true
 	mainapi.Uninject = function() return false end
-	if shared.BadVape == mainapi then shared.BadVape = nil end
-	if _G.BadVape == mainapi then _G.BadVape = nil end
+	if shared.BVC == mainapi then shared.BVC = nil end
+	if _G.BVC == mainapi then _G.BVC = nil end
 	-- A replacement loader owns the marker.  Preserve it across stale cleanup;
 	-- normal self-destruct must clear it so the next run is a cold start.
 	if not reloadRequested then
-		shared.BadVapeReload = nil
+		shared.BVCReload = nil
 	end
-	shared.BadVapeIndependent = nil
+	shared.BVCIndependent = nil
 	return true
 end
 
@@ -6186,22 +6186,22 @@ function mainapi:Reinject()
 	if mainapi.Uninjecting or mainapi.Uninjected then
 		return false
 	end
-	local folder = shared.BadVapeFolder or 'badvape'
+	local folder = shared.BVCFolder or 'bvc'
 	local source
-	if shared.BadVapeDeveloper then
+	if shared.BVCDeveloper then
 		source = readfile(folder..'/loader.lua')
 	else
 		source = game:HttpGet(
-			'https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/'
+			'https://raw.githubusercontent.com/ezbrohack/bvc-v2/'
 				..readfile(folder..'/profiles/commit.txt')..'/loader.lua',
 			true
 		)
 	end
 	local loader, loadError = loadstring(source, 'loader')
 	if type(loader) ~= 'function' then
-		error(loadError or 'BadVape loader rejected', 0)
+		error(loadError or 'BVC loader rejected', 0)
 	end
-	shared.BadVapeReload = true
+	shared.BVCReload = true
 	pcall(mainapi.Uninject, mainapi)
 	return loader(license)
 end
@@ -6326,43 +6326,43 @@ mainapi:CreateGUI()
 mainapi.Categories.Main:CreateDivider()
 mainapi:CreateCategory({
 	Name = 'Combat',
-	Icon = getcustomasset('badvape/assets/new/combaticon.png'),
+	Icon = getcustomasset('bvc/assets/new/combaticon.png'),
 	Size = UDim2.fromOffset(13, 14)
 })
 mainapi:CreateCategory({
 	Name = 'Blatant',
-	Icon = getcustomasset('badvape/assets/new/blatanticon.png'),
+	Icon = getcustomasset('bvc/assets/new/blatanticon.png'),
 	Size = UDim2.fromOffset(14, 14)
 })
 mainapi:CreateCategory({
 	Name = 'Render',
-	Icon = getcustomasset('badvape/assets/new/rendericon.png'),
+	Icon = getcustomasset('bvc/assets/new/rendericon.png'),
 	Size = UDim2.fromOffset(15, 14)
 })
 mainapi:CreateCategory({
 	Name = 'Utility',
-	Icon = getcustomasset('badvape/assets/new/utilityicon.png'),
+	Icon = getcustomasset('bvc/assets/new/utilityicon.png'),
 	Size = UDim2.fromOffset(15, 14)
 })
 mainapi:CreateCategory({
 	Name = 'World',
-	Icon = getcustomasset('badvape/assets/new/worldicon.png'),
+	Icon = getcustomasset('bvc/assets/new/worldicon.png'),
 	Size = UDim2.fromOffset(14, 14)
 })
 mainapi:CreateCategory({
 	Name = 'Inventory',
-	Icon = getcustomasset('badvape/assets/new/inventoryicon.png'),
+	Icon = getcustomasset('bvc/assets/new/inventoryicon.png'),
 	Size = UDim2.fromOffset(15, 14)
 })
 mainapi:CreateCategory({
 	Name = 'Minigames',
-	Icon = getcustomasset('badvape/assets/new/miniicon.png'),
+	Icon = getcustomasset('bvc/assets/new/miniicon.png'),
 	Size = UDim2.fromOffset(19, 12)
 })
 if game.GameId == 2619619496 then
 	mainapi:CreateCategory({
 		Name = 'Kits',
-		Icon = getcustomasset('badvape/assets/new/friendstab.png'),
+		Icon = getcustomasset('bvc/assets/new/friendstab.png'),
 		Size = UDim2.fromOffset(15, 15)
 	})
 end
@@ -6380,7 +6380,7 @@ local friendscolor = {
 }
 local friendssettings = {
 	Name = 'Friends',
-	Icon = getcustomasset('badvape/assets/new/friendstab.png'),
+	Icon = getcustomasset('bvc/assets/new/friendstab.png'),
 	Size = UDim2.fromOffset(17, 16),
 	Placeholder = 'Roblox username',
 	Color = Color3.fromRGB(5, 134, 105),
@@ -6433,7 +6433,7 @@ mainapi:Clean(friends.ColorUpdate)
 ]]
 local profiles = mainapi:CreateCategoryList({
 	Name = 'Profiles',
-	Icon = getcustomasset('badvape/assets/new/profilesicon.png'),
+	Icon = getcustomasset('bvc/assets/new/profilesicon.png'),
 	Size = UDim2.fromOffset(17, 10),
 	Position = UDim2.fromOffset(12, 16),
 	Placeholder = 'Create new profile',
@@ -6445,7 +6445,7 @@ local profileName = profiles:CreateTextBox({
 	Darker = true,
 })
 local function profileFile(name)
-	return 'badvape/profiles/'..tostring(name)..tostring(mainapi.Place)..'.txt'
+	return 'bvc/profiles/'..tostring(name)..tostring(mainapi.Place)..'.txt'
 end
 
 local function profileSummary(name)
@@ -6517,8 +6517,8 @@ profiles:CreateButton({
 			local awesome = `imported ({#mainapi.Profiles + 1})`
 			table.insert(mainapi.Profiles, {Name = awesome, Bind = {}})
 			mainapi:Save(awesome)
-			writefile('badvape/profiles/'..awesome..mainapi.Place..'.txt', result.config)
-			writefile('badvape/profiles/'..game.GameId..'.gui.txt', result.gui)
+			writefile('bvc/profiles/'..awesome..mainapi.Place..'.txt', result.config)
+			writefile('bvc/profiles/'..game.GameId..'.gui.txt', result.gui)
 			mainapi:Load(true, awesome)
 		end
 	end
@@ -6531,8 +6531,8 @@ profiles:CreateButton({
 	fetched after the user explicitly chooses an entry. Install names are kept
 	separate from the uploader's name so local profiles can be renamed safely.
 ]]
-local cloudApiBase = tostring(shared.BadVapeCloudApiBase or 'https://luvit.cc/badvape-api/v1/cloud'):gsub('/+$', '')
-local cloudSessionPath = 'badvape/cache/cloud-session.json'
+local cloudApiBase = tostring(shared.BVCCloudApiBase or 'http://localhost:3000'):gsub('/+$', '')
+local cloudSessionPath = 'bvc/cache/cloud-session.json'
 local cloudEntries = {}
 local cloudUpdating = false
 local cloudPage = 1
@@ -6787,7 +6787,7 @@ end
 local cloudConfigs
 cloudConfigs = mainapi:CreateCategoryList({
 	Name = 'Cloud Configs',
-	Icon = getcustomasset('badvape/assets/new/profilesicon.png'),
+	Icon = getcustomasset('bvc/assets/new/profilesicon.png'),
 	Size = UDim2.fromOffset(17, 10),
 	Position = UDim2.fromOffset(12, 16),
 	Placeholder = 'Choose config',
@@ -6990,8 +6990,8 @@ Name = 'Upload current',
 			local authenticated, authError = authenticateCloud()
 			if not authenticated then return cloudNotify('Cloud authentication failed: '..tostring(authError), 'warning') end
 			pcall(mainapi.Save, mainapi)
-			local configPath = 'badvape/profiles/'..mainapi.Profile..mainapi.Place..'.txt'
-			local guiPath = 'badvape/profiles/'..game.GameId..'.gui.txt'
+			local configPath = 'bvc/profiles/'..mainapi.Profile..mainapi.Place..'.txt'
+			local guiPath = 'bvc/profiles/'..game.GameId..'.gui.txt'
 			if not isfile(configPath) or not isfile(guiPath) then return cloudNotify('Current profile files are unavailable.', 'warning') end
 			local config = cloudDecode(readfile(configPath))
 			local guiData = cloudDecode(readfile(guiPath))
@@ -7017,7 +7017,7 @@ Name = 'Install selected',
 			if not selected then return cloudNotify('Select a cloud config first.', 'warning') end
 			local installName = cloudSafeName(cloudInstallName.Value, selected.name)
 			if not installName then return cloudNotify('Choose a valid install name.', 'warning') end
-			local configPath = 'badvape/profiles/'..installName..mainapi.Place..'.txt'
+			local configPath = 'bvc/profiles/'..installName..mainapi.Place..'.txt'
 			local alreadyListed = false
 			for _, profile in ipairs(mainapi.Profiles or {}) do
 				if string.lower(tostring(profile.Name or '')) == string.lower(installName) then alreadyListed = true break end
@@ -7031,7 +7031,7 @@ Name = 'Install selected',
 			if not response then return cloudNotify('Download failed: '..tostring(err), 'warning') end
 			local payload = response.config
 			if not payload or not payload.config or not payload.gui then return cloudNotify('Cloud payload is incomplete.', 'warning') end
-			local guiPath = 'badvape/profiles/'..game.GameId..'.gui.txt'
+			local guiPath = 'bvc/profiles/'..game.GameId..'.gui.txt'
 			local previousConfig = cloudReadFile(configPath)
 			local previousGui = cloudReadFile(guiPath)
 			local previousProfile = mainapi.Profile
@@ -7170,7 +7170,7 @@ end})
 local targets
 targets = mainapi:CreateCategoryList({
 	Name = 'Targets',
-	Icon = getcustomasset('badvape/assets/new/friendstab.png'),
+	Icon = getcustomasset('bvc/assets/new/friendstab.png'),
 	Size = UDim2.fromOffset(17, 16),
 	Placeholder = 'Roblox username',
 	Function = function()
@@ -7198,22 +7198,22 @@ general:CreateButton({
 	Name = 'Reset current profile',
 	Function = function()
 	mainapi.Save = function() end
-		if isfile('badvape/profiles/'..mainapi.Profile..mainapi.Place..'.txt') and delfile then
-			delfile('badvape/profiles/'..mainapi.Profile..mainapi.Place..'.txt')
+		if isfile('bvc/profiles/'..mainapi.Profile..mainapi.Place..'.txt') and delfile then
+			delfile('bvc/profiles/'..mainapi.Profile..mainapi.Place..'.txt')
 		end
 		mainapi:Reinject()
 	end,
-	Tooltip = 'This will set your profile to the default settings of BadVape'
+	Tooltip = 'This will set your profile to the default settings of BVC'
 })
 general:CreateButton({
 	Name = 'Export to JSON',
 	Function = function()
 		local tab = {}
-		if isfile('badvape/profiles/'..mainapi.Profile..mainapi.Place..'.txt') then
-			tab.config = readfile('badvape/profiles/'..mainapi.Profile..mainapi.Place..'.txt')
+		if isfile('bvc/profiles/'..mainapi.Profile..mainapi.Place..'.txt') then
+			tab.config = readfile('bvc/profiles/'..mainapi.Profile..mainapi.Place..'.txt')
 		end
-		if isfile('badvape/profiles/'..game.GameId..'.gui.txt') then
-			tab.gui = readfile('badvape/profiles/'..game.GameId..'.gui.txt')
+		if isfile('bvc/profiles/'..game.GameId..'.gui.txt') then
+			tab.gui = readfile('bvc/profiles/'..game.GameId..'.gui.txt')
 		end
 		tab.game = tostring(mainapi.Place or 'universal'.. game.PlaceId)
 		setclipboard(httpService:JSONEncode(tab))
@@ -7225,14 +7225,14 @@ general:CreateButton({
 	Function = function()
 		mainapi:Uninject()
 	end,
-	Tooltip = 'Removes BadVape from the current game'
+	Tooltip = 'Removes BVC from the current game'
 })
 general:CreateButton({
 	Name = 'Reinject',
 	Function = function()
 		mainapi:Reinject()
 	end,
-	Tooltip = 'Reloads BadVape for debugging purposes'
+	Tooltip = 'Reloads BVC for debugging purposes'
 })
 
 --[[
@@ -7341,11 +7341,11 @@ guipane:CreateDropdown({
 	List = {'new', 'old'},
 	Function = function(val, mouse)
 		if mouse then
-			writefile('badvape/profiles/gui.txt', val)
+			writefile('bvc/profiles/gui.txt', val)
 			mainapi:Reinject()
 		end
 	end,
-	Tooltip = 'new - The newest BadVape UI\nold - The classic BadVape UI'
+	Tooltip = 'new - The newest BVC UI\nold - The classic BVC UI'
 })
 mainapi.ToggleMode = guipane:CreateDropdown({
 	Name = 'Keybind mode',
@@ -7455,7 +7455,7 @@ mainapi.Categories.Main:CreateBind()
 
 local textgui = mainapi:CreateOverlay({
 	Name = 'Text GUI',
-	Icon = getcustomasset('badvape/assets/new/textguiicon.png'),
+	Icon = getcustomasset('bvc/assets/new/textguiicon.png'),
 	Size = UDim2.fromOffset(16, 12),
 	Position = UDim2.fromOffset(12, 14),
 	Function = function()
@@ -7539,7 +7539,7 @@ local textguianimations = textgui:CreateToggle({
 })
 local textguiwatermark = textgui:CreateToggle({
 	Name = 'Watermark',
-	Tooltip = 'Renders a BadVape watermark',
+	Tooltip = 'Renders a BVC watermark',
 	Function = function()
 		mainapi:UpdateTextGUI()
 	end
@@ -7589,8 +7589,8 @@ local textguimodules = textgui:CreateToggle({
 textguimoduleslist = textgui:CreateTextList({
 	Name = 'Blacklist',
 	Tooltip = 'Name of module to hide.',
-	Icon = getcustomasset('badvape/assets/new/blockedicon.png'),
-	Tab = getcustomasset('badvape/assets/new/blockedtab.png'),
+	Icon = getcustomasset('bvc/assets/new/blockedicon.png'),
+	Tab = getcustomasset('bvc/assets/new/blockedtab.png'),
 	TabSize = UDim2.fromOffset(21, 16),
 	Color = Color3.fromRGB(250, 50, 56),
 	Function = function()
@@ -7667,7 +7667,7 @@ VapeLogo.BackgroundTransparency = 1
 VapeLogo.BorderSizePixel = 0
 VapeLogo.Visible = false
 VapeLogo.BackgroundColor3 = Color3.new()
-VapeLogo.Image = getcustomasset('badvape/assets/new/textvape.png')
+VapeLogo.Image = getcustomasset('bvc/assets/new/textvape.png')
 VapeLogo.Parent = textgui.Children
 
 local lastside = textgui.Children.AbsolutePosition.X > (gui.AbsoluteSize.X / 2)
@@ -7689,7 +7689,7 @@ VapeLogoV4.Position = UDim2.new(1, 1, 0, 1)
 VapeLogoV4.BackgroundColor3 = Color3.new()
 VapeLogoV4.BackgroundTransparency = 1
 VapeLogoV4.BorderSizePixel = 0
-VapeLogoV4.Image = getcustomasset('badvape/assets/new/textv4.png')
+VapeLogoV4.Image = getcustomasset('bvc/assets/new/textv4.png')
 VapeLogoV4.Parent = VapeLogo
 local VapeLogoShadow = VapeLogo:Clone()
 VapeLogoShadow.Position = UDim2.fromOffset(1, 1)
@@ -7759,7 +7759,7 @@ local targetinfoobj
 local targetinfobcolor
 targetinfoobj = mainapi:CreateOverlay({
 	Name = 'Target Info',
-	Icon = getcustomasset('badvape/assets/new/targetinfoicon.png'),
+	Icon = getcustomasset('bvc/assets/new/targetinfoicon.png'),
 	Size = UDim2.fromOffset(14, 14),
 	Position = UDim2.fromOffset(12, 14),
 	CategorySize = 240,

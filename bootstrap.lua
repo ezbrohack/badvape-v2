@@ -1,13 +1,7 @@
 --!nocheck
 -- Compact public bootstrap with an executor-request fallback.
 
-local credential, requestedReleaseRef = ...
-if type(credential) ~= 'string'
-	or #credential < 1
-	or #credential > 128
-	or credential:find('%s') then
-	error('invalid BadVape credential', 0)
-end
+local requestedReleaseRef = ...
 
 local environments, seenEnvironments = {}, {}
 local function addEnvironment(candidate)
@@ -88,7 +82,7 @@ local function waitForDestinationReady()
 end
 
 if not waitForDestinationReady() then
-	error('BadVape destination place did not finish loading', 0)
+	error('BVC destination place did not finish loading', 0)
 end
 
 local adapters, seenAdapters = {}, {}
@@ -144,34 +138,34 @@ if requestedReleaseRef ~= nil then
 	if type(requestedReleaseRef) ~= 'string'
 		or not requestedReleaseRef:match('^[0-9a-f]+$')
 		or #requestedReleaseRef ~= 40 then
-		error('invalid BadVape release ref', 0)
+		error('invalid BVC release ref', 0)
 	end
 	releaseRef = requestedReleaseRef
 end
 local bootstrap, compileError
 for _, url in ipairs({
-	'https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/'..releaseRef..'/init.lua',
-	'https://cdn.jsdelivr.net/gh/4fundsagent-source/badvape-v2@'..releaseRef..'/init.lua',
+	'https://raw.githubusercontent.com/ezbrohack/badvape-v2/'..releaseRef..'/init.lua',
+	'https://cdn.jsdelivr.net/gh/ezbrohack/badvape-v2@'..releaseRef..'/init.lua',
 }) do
 	local source = fetch(url)
 	if source then
-		bootstrap, compileError = loadstring(source, '@badvape/public-init')
+		bootstrap, compileError = loadstring(source, '@bvc/public-init')
 		if type(bootstrap) == 'function' then break end
 	end
 end
 if type(bootstrap) ~= 'function' then
-	error(compileError or 'BadVape bootstrap download failed', 0)
+	error(compileError or 'BVC bootstrap download failed', 0)
 end
 
 local hasShared = type(shared) == 'table'
-local previousReleaseRef = hasShared and shared.BadVapeReleaseRef or nil
--- init.lua accepts only immutable SHA refs through BadVapeReleaseRef.  When
+local previousReleaseRef = hasShared and shared.BVCReleaseRef or nil
+-- init.lua accepts only immutable SHA refs through BVCReleaseRef.  When
 -- releaseRef is `main`, leave the shared value unset so init.lua performs its
 -- normal branch/API resolution instead of rejecting the bootstrap call.
 if hasShared then
-	shared.BadVapeReleaseRef = releaseRef ~= 'main' and releaseRef or nil
+	shared.BVCReleaseRef = releaseRef ~= 'main' and releaseRef or nil
 end
-local result = table.pack(pcall(bootstrap, {Key = credential}, {requestAdapters = adapters}, requestedReleaseRef))
-if hasShared then shared.BadVapeReleaseRef = previousReleaseRef end
+local result = table.pack(pcall(bootstrap, nil, {requestAdapters = adapters}, requestedReleaseRef))
+if hasShared then shared.BVCReleaseRef = previousReleaseRef end
 if not result[1] then error(result[2], 0) end
 return table.unpack(result, 2, result.n)

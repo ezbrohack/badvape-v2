@@ -13,7 +13,7 @@ local runService = cloneref(game:GetService('RunService'))
 
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
-local vape = shared.BadVape
+local vape = shared.BVC
 local entitylib = vape.Libraries.entity
 local targetinfo = vape.Libraries.targetinfo
 local prediction = vape.Libraries.prediction

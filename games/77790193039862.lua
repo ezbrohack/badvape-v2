@@ -11,7 +11,7 @@ local coreGui = cloneref(game:GetService('CoreGui'))
 
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
-local vape = shared.BadVape
+local vape = shared.BVC
 local entitylib = vape.Libraries.entity
 local targetinfo = vape.Libraries.targetinfo
 local arena = {}

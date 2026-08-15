@@ -1,4 +1,4 @@
--- BadVape public runtime installer.
+-- BVC public runtime installer.
 -- The manifest is an explicit allowlist; private game source is never part of it.
 
 local forwardedLicense, installerTransport, requestedReleaseRef = ...
@@ -61,14 +61,14 @@ local function waitForDestinationReady()
 end
 
 if not waitForDestinationReady() then
-	error('BadVape destination place did not finish loading', 0)
+	error('BVC destination place did not finish loading', 0)
 end
 
-local owner = '4fundsagent-source'
+local owner = 'ezbrohack'
 local repo = 'badvape-v2'
 local branch = 'main'
-local folder = shared.BadVapeFolder or 'badvape'
-local diagnosticsPath = folder..'/badvape-debug.txt'
+local folder = shared.BVCFolder or 'bvc'
+local diagnosticsPath = folder..'/bvc-debug.txt'
 
 -- Teleport reloads may pin the exact immutable release that was already
 -- installed.  This is validated before any network selection and takes
@@ -77,7 +77,7 @@ if requestedReleaseRef ~= nil then
 	if type(requestedReleaseRef) ~= 'string'
 		or not requestedReleaseRef:match('^[0-9a-f]+$')
 		or #requestedReleaseRef ~= 40 then
-		error('invalid BadVape release ref', 0)
+		error('invalid BVC release ref', 0)
 	end
 	branch = requestedReleaseRef
 end
@@ -85,7 +85,7 @@ end
 -- Keep one self-contained report in the workspace. It deliberately excludes
 -- credentials, device identifiers, auth tokens, request headers and contents.
 local diagnosticLines = {
-	'BadVape diagnostics v1',
+	'BVC diagnostics v1',
 	'privacy=credentials, device identifiers, auth tokens, headers and file contents are not recorded',
 }
 local diagnosticStarted = type(os) == 'table' and type(os.clock) == 'function' and os.clock() or 0
@@ -119,13 +119,6 @@ local diagnosticCriticalEvents = {
 }
 local forwardedSecret = type(forwardedLicense) == 'table' and forwardedLicense.Key
 forwardedSecret = type(forwardedSecret) == 'string' and forwardedSecret or nil
-local forwardedLuaProtMarker, forwardedLuaProtSecret
-if forwardedSecret then
-	forwardedLuaProtMarker, forwardedLuaProtSecret = forwardedSecret:match('^LP%-([BR])%-([a-f0-9]+)$')
-end
-if forwardedLuaProtSecret and #forwardedLuaProtSecret ~= 24 then
-	forwardedLuaProtMarker, forwardedLuaProtSecret = nil, nil
-end
 
 local function replacePlain(value, needle, replacement)
 	if type(value) ~= 'string' or type(needle) ~= 'string' or needle == '' then
@@ -149,9 +142,6 @@ local function diagnosticValue(value)
 	value = tostring(value)
 	if forwardedSecret and forwardedSecret ~= '' then
 		value = replacePlain(value, forwardedSecret, '<credential-redacted>')
-	end
-	if forwardedLuaProtSecret then
-		value = replacePlain(value, forwardedLuaProtSecret, '<credential-redacted>')
 	end
 	value = value:gsub('BV%-%u%-[%w]+', '<license-redacted>')
 	value = value:gsub("([\"']?[Kk][Ee][Yy][\"']?%s*[:=]%s*[\"']?)[^%s,;\"'}]+", '%1<redacted>')
@@ -203,18 +193,18 @@ diagnostics.flush = function()
 	return flushDiagnostics(true)
 end
 diagnostics.redact = diagnosticValue
-shared.BadVapeDiagnostics = diagnostics
+shared.BVCDiagnostics = diagnostics
 flushDiagnostics(true)
 
 local pinnedReleaseRef
-if shared.BadVapeReleaseRef ~= nil then
-	if type(shared.BadVapeReleaseRef) ~= 'string'
-		or not shared.BadVapeReleaseRef:match('^[0-9a-f]+$')
-		or #shared.BadVapeReleaseRef ~= 40 then
+if shared.BVCReleaseRef ~= nil then
+	if type(shared.BVCReleaseRef) ~= 'string'
+		or not shared.BVCReleaseRef:match('^[0-9a-f]+$')
+		or #shared.BVCReleaseRef ~= 40 then
 		diagnostics.record('installer_invalid_release_ref')
-		error('invalid BadVape release ref', 0)
+		error('invalid BVC release ref', 0)
 	end
-	pinnedReleaseRef = shared.BadVapeReleaseRef
+	pinnedReleaseRef = shared.BVCReleaseRef
 	branch = pinnedReleaseRef
 end
 local revisionPath = folder..'/cache/public-revision.txt'
@@ -226,11 +216,11 @@ local profileUpdateRoot = folder..'/cache/profile-updates'
 local releaseRefPath = folder..'/cache/public-release-ref.txt'
 local runtimeRepairPath = folder..'/cache/runtime-repair-20260716-v1.txt'
 
-shared.BadVapeFolder = folder
+shared.BVCFolder = folder
 -- This flag is scoped to the current installer execution.  The game module
 -- uses it only to yield during a cold/update registration pass; cached runs
 -- stay on the fast path.
-shared.BadVapeColdStart = false
+shared.BVCColdStart = false
 
 local function identifyExecutor()
 	local candidates = {identifyexecutor, getexecutorname}
@@ -251,8 +241,7 @@ local function identifyExecutor()
 end
 
 diagnostics.record('installer_start', {
-	credentialKind = forwardedLuaProtSecret and 'luaprot'
-		or (forwardedSecret and (forwardedSecret:match('^BV%-%u%-') and 'license' or 'uid') or 'missing'),
+	credentialKind = forwardedSecret and (forwardedSecret:match('^BV%-%u%-') and 'license' or 'uid') or 'free',
 	executor = identifyExecutor(),
 	folder = folder,
 	gameId = game.GameId,
@@ -413,23 +402,23 @@ local function runCachedRuntime()
 	local osPath = folder..'/os.luau'
 	if not safeIsFile(osPath) then
 		diagnostics.record('runtime_missing', {path = osPath})
-		error('missing cached BadVape runtime', 0)
+		error('missing cached BVC runtime', 0)
 	end
 	local readOk, osSource = pcall(readfile, osPath)
 	if not readOk or type(osSource) ~= 'string' or osSource == '' then
 		diagnostics.record('runtime_read_failed', {error = osSource, path = osPath})
-		error('failed to read cached BadVape runtime', 0)
+		error('failed to read cached BVC runtime', 0)
 	end
 	diagnostics.record('runtime_compile_start', {bytes = #osSource, path = osPath})
 	local compileResult = table.pack(pcall(loadstring, osSource, folder..'/os.luau'))
 	if not compileResult[1] then
 		diagnostics.record('runtime_compile_failed', {error = compileResult[2], path = osPath})
-		error(compileResult[2] or 'BadVape runtime rejected', 0)
+		error(compileResult[2] or 'BVC runtime rejected', 0)
 	end
 	local osChunk, loadError = compileResult[2], compileResult[3]
 	if type(osChunk) ~= 'function' then
 		diagnostics.record('runtime_compile_failed', {error = loadError or 'rejected', path = osPath})
-		error(loadError or 'BadVape runtime rejected', 0)
+		error(loadError or 'BVC runtime rejected', 0)
 	end
 	diagnostics.record('runtime_compile_complete', {path = osPath})
 	local function traceError(value)
@@ -453,16 +442,19 @@ local function runCachedRuntime()
 	return table.unpack(runtimeResult, 2, runtimeResult.n)
 end
 
--- Only an explicit developer flag may select the local workspace.  Public
--- installs can retain `profiles/commit.txt=local` from older versions; that
--- marker is not an authorization signal and must not bypass manifest repair.
-local localWorkspace = shared.BadVapeDeveloper == true and safeIsFile(folder..'/os.luau')
+local localWorkspace = shared.BVCDeveloper == true and safeIsFile(folder..'/os.luau')
+if not localWorkspace and safeIsFile(folder..'/profiles/commit.txt') then
+	local markerOk, marker = pcall(readfile, folder..'/profiles/commit.txt')
+	localWorkspace = markerOk
+		and type(marker) == 'string'
+		and marker:match('^%s*(.-)%s*$') == 'local'
+end
 if localWorkspace then
 	diagnostics.record('installer_local_workspace', {folder = folder})
 	return runCachedRuntime()
 end
-if shared.BadVapeDeveloper == true then
-	shared.BadVapeDeveloper = nil
+if shared.BVCDeveloper == true then
+	shared.BVCDeveloper = nil
 end
 
 local releaseRef, releaseStrategy
@@ -512,7 +504,7 @@ if not releaseRef then
 			cachedRef = cachedReleaseRef or 'none',
 			requestedRef = pinnedReleaseRef,
 		})
-		error('pinned BadVape cache mismatch', 0)
+		error('pinned BVC cache mismatch', 0)
 	end
 	-- GitHub's unauthenticated commit API can be rate-limited even while raw
 	-- content remains healthy. Both fresh and existing installs must try the
@@ -530,19 +522,15 @@ local baseUrls = {
 local publicGamePaths = {
 	['games/11156779721.lua'] = true,
 	['games/123804558118054.lua'] = true,
-	['games/129604661913557.lua'] = true,
 	['games/131465939650733.lua'] = true,
 	['games/13246639586.lua'] = true,
 	['games/135564683255158.lua'] = true,
 	['games/139566161526375.lua'] = true,
 	['games/142823291.lua'] = true,
 	['games/155615604.lua'] = true,
-	['games/17625359962.lua'] = true,
-	['games/18126510175.lua'] = true,
 	['games/5938036553.lua'] = true,
 	['games/606849621.lua'] = true,
 	['games/6872265039.lua'] = true,
-	['games/71874690745115.lua'] = true,
 	['games/77790193039862.lua'] = true,
 	['games/80041634734121.lua'] = true,
 	['games/8542259458.lua'] = true,
@@ -556,17 +544,13 @@ local publicGamePaths = {
 	['games/8560631822.lua'] = true,
 	['games/madebyirony.lua'] = true,
 	['games/universal.lua'] = true,
-	['games/117398147513099.lua'] = true,
-	['games/133215910299950.lua'] = true,
 }
 local publicLibraryPaths = {
-	['libraries/badvape-theme.lua'] = true,
+	['libraries/bvc-theme.lua'] = true,
 	['libraries/base64.lua'] = true,
 	['libraries/cheatenginelib.lua'] = true,
 	['libraries/entity.lua'] = true,
 	['libraries/hash.lua'] = true,
-	['libraries/luaprot-bedwars.lua'] = true,
-	['libraries/luaprot-rivals.lua'] = true,
 	['libraries/prediction.lua'] = true,
 	['libraries/string.lua'] = true,
 	['libraries/vm.lua'] = true,
@@ -577,9 +561,6 @@ local seedProfilePaths = {
 	['profiles/blatant6872274481.txt'] = true,
 	['profiles/default6872265039.txt'] = true,
 	['profiles/default6872274481.txt'] = true,
-	['profiles/default117398147513099.txt'] = true,
-	['profiles/default133215910299950.txt'] = true,
-	['profiles/default17625359962.txt'] = true,
 	['profiles/gui.txt'] = true,
 }
 local releaseProfileOverridePaths = {
@@ -600,11 +581,9 @@ local commonInstallPaths = {
 	['os.luau'] = true,
 	['reinstall.luau'] = true,
 	['games/universal.lua'] = true,
-	['libraries/badvape-theme.lua'] = true,
+	['libraries/bvc-theme.lua'] = true,
 	['libraries/entity.lua'] = true,
 	['libraries/hash.lua'] = true,
-	['libraries/luaprot-bedwars.lua'] = true,
-	['libraries/luaprot-rivals.lua'] = true,
 	['libraries/prediction.lua'] = true,
 	['libraries/string.lua'] = true,
 	['profiles/features.json'] = true,
@@ -625,21 +604,6 @@ local gameDependencyPaths = {
 		['games/6872274481.lua'] = true,
 		['games/madebyirony.lua'] = true,
 		['libraries/cheatenginelib.lua'] = true,
-	},
-	[117398147513099] = {
-		['games/17625359962.lua'] = true,
-	},
-	[133215910299950] = {
-		['games/17625359962.lua'] = true,
-	},
-	[18126510175] = {
-		['games/17625359962.lua'] = true,
-	},
-	[71874690745115] = {
-		['games/17625359962.lua'] = true,
-	},
-	[129604661913557] = {
-		['games/17625359962.lua'] = true,
 	},
 	[606849621] = {
 		['libraries/vm.lua'] = true,
@@ -979,31 +943,11 @@ local function inspectFileContents(entry, readOk, contents)
 		observation.error = contents
 		return observation
 	end
-	-- Canonicalize once and compute one digest.  The previous implementation
-	-- called contentMatches (which hashes) and then hashed the same file again
-	-- to populate diagnostics.  Large protected modules paid that cost twice
-	-- during every installer scan.
-	local canonicalContents = canonicalPublicContent(entry and entry.path, contents)
 	observation.bytes = #contents
-	if entry and (type(canonicalContents) ~= 'string' or #canonicalContents ~= entry.bytes) then
-		-- A size mismatch cannot match the manifest.  Avoid hashing a large stale
-		-- download just to print a diagnostic digest.
-		observation.matches = false
-		if hashCandidate then observation.sha256 = 'size-mismatch' end
-		return observation
-	end
+	observation.matches = entry and contentMatches(entry, contents) or 'unknown'
 	if hashCandidate then
-		local hashOk, digest = invokeHash(hashCandidate, hashOwner, hashMode, canonicalContents, hashUseOwner)
+		local hashOk, digest = invokeHash(hashCandidate, hashOwner, hashMode, contents, hashUseOwner)
 		observation.sha256 = hashOk and validDigest(digest) and digest:lower() or 'hash-failed'
-	end
-	if not entry then
-		observation.matches = 'unknown'
-	elseif not hashCandidate then
-		-- Integrity is mandatory when no verified digest capability is present.
-		observation.matches = false
-	else
-		observation.matches = observation.sha256 ~= 'hash-failed'
-			and observation.sha256 == entry.sha256
 	end
 	return observation
 end
@@ -1023,7 +967,7 @@ function diagnostics.fileState(relativePath, entry, state, observed)
 	if relativePath:sub(1, #folder + 1) == folder..'/' then
 		path = relativePath
 	else
-		relativePath = relativePath:gsub('^badvape/', '', 1)
+		relativePath = relativePath:gsub('^bvc/', '', 1)
 		path = folder..'/'..relativePath
 	end
 	local observation = type(observed) == 'table' and observed or inspectCachedFile(path, entry)
@@ -1192,7 +1136,7 @@ function profileUpdateApi.ReadStaged(item)
 	local ok, contents = pcall(readfile, folder..'/'..item.stagedPath)
 	return ok and type(contents) == 'string' and contents or nil
 end
-shared.BadVapeProfileUpdate = profileUpdateApi
+shared.BVCProfileUpdate = profileUpdateApi
 
 local function neutralizeRetiredRuntimePath(path)
 	if not retiredRuntimePaths[path] then
@@ -1246,10 +1190,6 @@ if manifest then
 	local profilePlaceAliases = {
 		[8444591321] = 6872274481,
 		[8560631822] = 6872274481,
-		[117398147513099] = 17625359962,
-		[133215910299950] = 17625359962,
-		[71874690745115] = 17625359962,
-		[129604661913557] = 17625359962,
 	}
 	local currentProfilePlace = profilePlaceAliases[tonumber(game.PlaceId)] or tonumber(game.PlaceId)
 	local profileUpdateForRevision = false
@@ -1391,7 +1331,7 @@ if manifest then
 			end
 		end
 	end
-	shared.BadVapeColdStart = coldRuntimeInstall
+	shared.BVCColdStart = coldRuntimeInstall
 	diagnostics.record('install_plan', {
 		cached = requiredCount - #pending,
 		coldStart = coldRuntimeInstall,
@@ -1458,7 +1398,7 @@ if manifest then
 				reason = pendingFile.reason,
 			})
 			if safeIsFile(folder..'/os.luau') then
-				warn('BadVape update download failed; using the unchanged cached public runtime.')
+				warn('BVC update download failed; using the unchanged cached public runtime.')
 				diagnostics.record('installer_cache_fallback', {
 					path = pendingFile.entry.path,
 					reason = 'atomic download set incomplete',
@@ -1574,7 +1514,7 @@ elseif not safeIsFile(folder..'/os.luau') then
 	})
 	error(manifestBody and 'invalid public manifest' or 'failed to download public manifest', 0)
 else
-	warn('BadVape update check failed; using the cached public runtime.')
+	warn('BVC update check failed; using the cached public runtime.')
 	diagnostics.record('installer_cache_fallback', {reason = 'manifest unavailable'})
 end
 

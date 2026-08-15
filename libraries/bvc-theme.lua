@@ -33,6 +33,7 @@ return function(vape, entitylib)
 	local RemoveClouds
 	local CloudSize
 	local CloudTransparency
+	local CloudColor
 	local newObjects = {}
 	local oldObjects = {}
 	local storeBlocks = {}
@@ -82,7 +83,7 @@ return function(vape, entitylib)
 		if type(_G) == 'table' then table.insert(environments, _G) end
 		if type(shared) == 'table' then table.insert(environments, shared) end
 		for _, environment in environments do
-			local store = rawget(environment, 'BadVapeStore')
+			local store = rawget(environment, 'BVCStore')
 			if type(store) == 'table' then return store end
 		end
 	end
@@ -292,10 +293,11 @@ return function(vape, entitylib)
 		if not currentCloud or not currentCloud.Parent then return end
 		local size = CloudSize and tonumber(CloudSize.Value) or 0.8
 		local transparency = CloudTransparency and tonumber(CloudTransparency.Value) or 0.1
-		-- Realistic clouds use the neutral white/gray game default.  The old
-		-- color control silently fell back to hue 0.44 in the GUI and tinted
-		-- clouds turquoise, even when no custom color was selected.
-		local colorValue = Color3.new(1, 1, 1)
+		local colorValue = CloudColor and Color3.fromHSV(
+			CloudColor.Hue,
+			CloudColor.Sat,
+			CloudColor.Value
+		) or Color3.new(1, 1, 1)
 		pcall(function()
 			currentCloud.Cover = math.clamp(size, 0, 1)
 			currentCloud.Density = 1 - math.clamp(transparency, 0, 1)
@@ -733,7 +735,7 @@ return function(vape, entitylib)
 				cleanup()
 			end
 		end,
-		Tooltip = 'Applies BadVape atmospheric effects to the world',
+		Tooltip = 'Applies BVC atmospheric effects to the world',
 	})
 
 	Mode = Theme:CreateDropdown({
@@ -775,7 +777,13 @@ return function(vape, entitylib)
 		Function = applyCloudSettings,
 	})
 
-	vape.Libraries.badvapeTheme = Theme
+	CloudColor = Theme:CreateColorSlider({
+		Name = 'Cloud color',
+		Color = Color3.new(1, 1, 1),
+		Function = applyCloudSettings,
+	})
+
+	vape.Libraries.bvcTheme = Theme
 
 	return Theme
 end

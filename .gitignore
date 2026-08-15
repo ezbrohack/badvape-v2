@@ -1,18 +1,14 @@
-# Readable protected source lives outside this public runtime tree. The
-# reviewed encrypted games/6872274481.lua artifact is published normally.
+# BVC is a free, unofficial rebuild. Public runtime files are committed;
+# only per-user runtime state stays out of the repository.
 
 # Runtime/customer state is never part of the public repository.
 cache/
-simpleauth/
 profiles/*
 !profiles/2619619496.gui.txt
 !profiles/blatant6872265039.txt
 !profiles/blatant6872274481.txt
 !profiles/default6872265039.txt
 !profiles/default6872274481.txt
-!profiles/default117398147513099.txt
-!profiles/default133215910299950.txt
-!profiles/default17625359962.txt
 !profiles/features.json
 !profiles/gui.txt
 !profiles/packages.json

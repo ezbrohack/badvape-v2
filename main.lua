@@ -18,8 +18,8 @@ local function resolveRuntimeEnvironment()
 	return {}
 end
 local runtimeEnvironment = resolveRuntimeEnvironment()
-local restoreRuntimeEnvironment = type(shared.BadVapeRestoreRuntimeEnvironment) == 'function'
-	and shared.BadVapeRestoreRuntimeEnvironment or function() end
+local restoreRuntimeEnvironment = type(shared.BVCRestoreRuntimeEnvironment) == 'function'
+	and shared.BVCRestoreRuntimeEnvironment or function() end
 local license = {}
 if type(forwardedLicense) == 'table' then
 	for key, value in forwardedLicense do
@@ -27,24 +27,16 @@ if type(forwardedLicense) == 'table' then
 	end
 end
 license.Key = type(license.Key) == 'string' and license.Key or nil
-local luaProtProductMarker, luaProtKey
-if license.Key then
-	luaProtProductMarker, luaProtKey = license.Key:match('^LP%-([BR])%-([a-f0-9]+)$')
-end
-if luaProtKey and #luaProtKey ~= 24 then
-	luaProtProductMarker, luaProtKey = nil, nil
-end
-local diagnostics = type(shared.BadVapeDiagnostics) == 'table' and shared.BadVapeDiagnostics or nil
+local diagnostics = type(shared.BVCDiagnostics) == 'table' and shared.BVCDiagnostics or nil
 local diagnosticsPath = diagnostics and diagnostics.path
-	or (shared.BadVapeFolder or 'badvape')..'/badvape-debug.txt'
+	or (shared.BVCFolder or 'bvc')..'/bvc-debug.txt'
 local function recordDiagnostic(event, fields)
 	if diagnostics and type(diagnostics.record) == 'function' then
 		pcall(diagnostics.record, event, fields)
 	end
 end
 recordDiagnostic('main_start', {
-	credentialKind = luaProtKey and 'luaprot'
-		or (license.Key and (license.Key:match('^BV%-%u%-') and 'license' or 'uid') or 'missing'),
+	credentialKind = license.Key and (license.Key:match('^BV%-%u%-') and 'license' or 'uid') or 'free',
 	placeId = game.PlaceId,
 })
 local floodCraftPlaces = {
@@ -95,28 +87,28 @@ while tick() < readyDeadline do
 end
 if not runtimeReady then
 	recordDiagnostic('runtime_ready_timeout', runtimeReadyState)
-	error('BadVape destination place did not finish loading', 0)
+	error('BVC destination place did not finish loading', 0)
 end
 recordDiagnostic('runtime_ready', runtimeReadyState)
 -- A loader sets this marker before starting a replacement runtime.  Capture it
 -- before tearing down the previous GUI: the old runtime's Uninject method is
 -- allowed to clear its own globals, but it must not make the replacement look
 -- like a normal first load.
-local reloadRequested = shared.BadVapeReload == true
-local staleVape = shared.BadVape
+local reloadRequested = shared.BVCReload == true
+local staleVape = shared.BVC
 if type(staleVape) == 'table' and type(staleVape.Uninject) == 'function' then
 	pcall(staleVape.Uninject, staleVape)
 end
-if shared.BadVape == staleVape then
-	shared.BadVape = nil
+if shared.BVC == staleVape then
+	shared.BVC = nil
 end
-if _G.BadVape == staleVape then
-	_G.BadVape = nil
+if _G.BVC == staleVape then
+	_G.BVC = nil
 end
 if reloadRequested then
 	-- Restore the handoff marker after stale teardown.  This is deliberately
 	-- done even when the old Uninject failed part-way through cleanup.
-	shared.BadVapeReload = true
+	shared.BVCReload = true
 end
 
 local vape
@@ -124,7 +116,7 @@ local nativeLoadstring = loadstring
 local loadstring = function(source, chunkName)
 	local res, err = nativeLoadstring(source, chunkName)
 	if err and vape then
-		vape:CreateNotification('BadVape', 'Failed to compile '..tostring(chunkName)..' : '..tostring(err), 30, 'alert')
+		vape:CreateNotification('BVC', 'Failed to compile '..tostring(chunkName)..' : '..tostring(err), 30, 'alert')
 	end
 	return res, err
 end
@@ -159,8 +151,8 @@ local function runSource(source, chunkName, ...)
 		recordDiagnostic('source_runtime_failed', {chunk = chunkName, error = result[2]})
 		return false, detail
 	end
-	local protectedFailure = type(shared.BadVapeProtectedFailure) == 'table'
-		and shared.BadVapeProtectedFailure or nil
+	local protectedFailure = type(shared.BVCProtectedFailure) == 'table'
+		and shared.BVCProtectedFailure or nil
 	recordDiagnostic('source_execution_complete', {
 		chunk = chunkName,
 		protectedCorrelation = protectedFailure and protectedFailure.correlationId or 'none',
@@ -172,26 +164,6 @@ local function runSource(source, chunkName, ...)
 	return true, result[2]
 end
 
-local function runSourceWithTimeout(source, chunkName, timeout, ...)
-	local arguments = table.pack(...)
-	local finished, result = false, nil
-	local thread = task.spawn(function()
-		result = table.pack(runSource(source, chunkName, table.unpack(arguments, 1, arguments.n)))
-		finished = true
-	end)
-	local deadline = os.clock() + timeout
-	while not finished and os.clock() < deadline do
-		task.wait()
-	end
-	if not finished then
-		if type(task.cancel) == 'function' then
-			pcall(task.cancel, thread)
-		end
-		recordDiagnostic('source_execution_timeout', {chunk = chunkName, timeout = timeout})
-		return false, tostring(chunkName)..' execution timed out', true
-	end
-	return result[1], result[2], false
-end
 local function addTeleportQueueCandidate(list, seen, candidate)
 	if type(candidate) == 'function' and not seen[candidate] then
 		seen[candidate] = true
@@ -218,7 +190,7 @@ local function teleportQueueCandidates()
 end
 local teleportQueueParts = {}
 local teleportQueueFlushed = false
-shared.BadVapeTeleportQueueParts = teleportQueueParts
+shared.BVCTeleportQueueParts = teleportQueueParts
 local function flushTeleportQueue()
 	if teleportQueueFlushed then
 		recordDiagnostic('teleport_queue_flush_skipped', {reason = 'already-flushed'})
@@ -257,7 +229,7 @@ local function flushTeleportQueue()
 	})
 	return false
 end
-shared.BadVapeQueueTeleport = function(name, source)
+shared.BVCQueueTeleport = function(name, source)
 	if type(name) ~= 'string' or name == '' or type(source) ~= 'string' or source == '' then return false end
 	if teleportQueueFlushed then return false end
 	teleportQueueParts[name] = source
@@ -267,7 +239,7 @@ shared.BadVapeQueueTeleport = function(name, source)
 	})
 	return true
 end
-shared.BadVapeFlushTeleportQueue = flushTeleportQueue
+shared.BVCFlushTeleportQueue = flushTeleportQueue
 local isfile = isfile or function(file)
 	local suc, res = pcall(function()
 		return readfile(file)
@@ -279,7 +251,7 @@ local cloneref = cloneref or function(obj)
 end
 local playersService = cloneref(game:GetService('Players'))
 local httpService = cloneref(game:GetService('HttpService'))
-local runtimeFolder = shared.BadVapeFolder or 'badvape'
+local runtimeFolder = shared.BVCFolder or 'bvc'
 
 local redirect = function() end
 
@@ -300,16 +272,16 @@ local function downloadFile(path, func)
 	end
 	if not contents then
 		recordDiagnostic('runtime_file_cache_miss', {path = path})
-		if shared.BadVapeDeveloper then
+		if shared.BVCDeveloper then
 			recordDiagnostic('runtime_file_missing_local', {path = path})
-			error('Missing local BadVape file: '..path)
+			error('Missing local BVC file: '..path)
 		end
 
-		local relative = path:gsub('^badvape/', '', 1)
+		local relative = path:gsub('^bvc/', '', 1)
 		local releaseRef = installedReleaseRef()
 		local urls = {
-			'https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/'..releaseRef..'/'..relative,
-			'https://cdn.jsdelivr.net/gh/4fundsagent-source/badvape-v2@'..releaseRef..'/'..relative,
+			'https://raw.githubusercontent.com/ezbrohack/badvape-v2/'..releaseRef..'/'..relative,
+			'https://cdn.jsdelivr.net/gh/ezbrohack/badvape-v2@'..releaseRef..'/'..relative,
 		}
 		local lastError = 'download failed'
 		for mirror, url in urls do
@@ -350,7 +322,7 @@ end
 local ownedDownloadFile
 ownedDownloadFile = function(path)
 	if type(path) ~= 'string'
-		or not path:match('^badvape/[%w%._/%-]+$')
+		or not path:match('^bvc/[%w%._/%-]+$')
 		or path:find('..', 1, true) then
 		recordDiagnostic('runtime_file_path_rejected', {path = path})
 		return nil
@@ -361,9 +333,9 @@ ownedDownloadFile = function(path)
 	end
 	return ok and result or nil
 end
-shared.BadVapeDownloadFile = ownedDownloadFile
+shared.BVCDownloadFile = ownedDownloadFile
 
-local function loadBadVapeTheme()
+local function loadBVCTheme()
 	if not vape or not vape.Categories or not vape.Categories.Render then
 		return
 	end
@@ -373,7 +345,7 @@ local function loadBadVapeTheme()
 	end
 
 	local suc, res = pcall(function()
-		local themeChunk = loadstring(downloadFile('badvape/libraries/badvape-theme.lua'), 'badvape-theme')
+		local themeChunk = loadstring(downloadFile('bvc/libraries/bvc-theme.lua'), 'bvc-theme')
 		if not themeChunk then
 			return
 		end
@@ -385,7 +357,7 @@ local function loadBadVapeTheme()
 	end)
 
 	if not suc then
-		vape:CreateNotification('BadVape', 'Theme failed to load : '..tostring(res), 10, 'alert')
+		vape:CreateNotification('BVC', 'Theme failed to load : '..tostring(res), 10, 'alert')
 	end
 end
 
@@ -395,7 +367,7 @@ local function loadMaxPrediction()
 	end
 
 	vape.Libraries = vape.Libraries or {}
-	shared.BadVapePredictionMode = 'max-devirtualized'
+	shared.BVCPredictionMode = 'max-devirtualized'
 	vape.Libraries.calculatePosition = function(selfPosition, rootPart)
 		local targetPosition = rootPart and rootPart.Position
 		if typeof(selfPosition) ~= 'Vector3' or typeof(targetPosition) ~= 'Vector3' then
@@ -407,34 +379,10 @@ end
 
 local teleportReloadInstalled = false
 local function installTeleportReload()
-	if teleportReloadInstalled or shared.BadVapeIndependent then
+	if teleportReloadInstalled or shared.BVCIndependent then
 		return teleportReloadInstalled
 	end
 
-	local teleportCredential = tostring(license.Key or '')
-	local teleportMarker, teleportLuaProtKey = teleportCredential:match('^LP%-([BR])%-([a-f0-9]+)$')
-	local teleportUid = teleportCredential:lower()
-	if teleportMarker and #teleportLuaProtKey == 24 then
-		-- Keep the product marker for local wrong-game detection. The runtime
-		-- installs only the raw key into LuaProt's global.
-	elseif #teleportUid >= 1 and #teleportUid <= 24 and teleportUid:match('^%l[%w_]*$') then
-		teleportCredential = teleportUid
-	else
-		teleportCredential = nil
-	end
-
-	if not teleportCredential then
-		if license.Key then
-			local message = license.Key:match('^BV%-%u%-')
-				and 'Automatic teleport reload needs your UID. Run /setuid, then use /getscript.'
-				or 'Automatic teleport reload needs a current script. Run /getscript in Discord.'
-			vape:CreateNotification('BadVape', message, 10, 'warning')
-		end
-		teleportReloadInstalled = true
-		return false
-	end
-
-	local encodedCredential = httpService:JSONEncode(teleportCredential)
 	local installedRef = 'main'
 	if type(readfile) == 'function' then
 		local readOk, cachedRef = pcall(readfile, runtimeFolder..'/cache/public-release-ref.txt')
@@ -450,19 +398,19 @@ local function installTeleportReload()
 		or 'nil'
 	local encodedFolder = httpService:JSONEncode(runtimeFolder)
 	local teleportScript
-	if shared.BadVapeDeveloper then
-		teleportScript = 'shared.BadVapeReload = true\n'
-			..'shared.BadVapeDeveloper = true\n'
-			..'shared.BadVapeFolder = '..encodedFolder..'\n'
-			..'local badVapeLoader, badVapeLoadError = loadstring(readfile(shared.BadVapeFolder.."/loader.lua"), "@badvape/loader.lua")\n'
-			..'if type(badVapeLoader) ~= "function" then error(badVapeLoadError or "BadVape local loader rejected", 0) end\n'
-			..'return badVapeLoader({Key = '..encodedCredential..'})'
+	if shared.BVCDeveloper then
+		teleportScript = 'shared.BVCReload = true\n'
+			..'shared.BVCDeveloper = true\n'
+			..'shared.BVCFolder = '..encodedFolder..'\n'
+			..'local bvcLoader, bvcLoadError = loadstring(readfile(shared.BVCFolder.."/loader.lua"), "@bvc/loader.lua")\n'
+			..'if type(bvcLoader) ~= "function" then error(bvcLoadError or "BVC local loader rejected", 0) end\n'
+			..'return bvcLoader()'
 	else
 		local loaderUrl = httpService:JSONEncode(
-			'https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/main/bootstrap.lua'
+			'https://raw.githubusercontent.com/ezbrohack/badvape-v2/main/bootstrap.lua'
 		)
-		teleportScript = 'shared.BadVapeReload = true\n'
-			..'shared.BadVapeFolder = '..encodedFolder..'\n'
+		teleportScript = 'shared.BVCReload = true\n'
+			..'shared.BVCFolder = '..encodedFolder..'\n'
 			..'local u = '..loaderUrl..'\n'
 			..'local s\n'
 			..'pcall(function() s = game:HttpGet(u, true) end)\n'
@@ -484,21 +432,21 @@ local function installTeleportReload()
 			..'    end\n'
 			..'  end\n'
 			..'end\n'
-			..'local b, e = loadstring(s, "@badvape/bootstrap")\n'
-			..'if type(b) ~= "function" then error(e or "BadVape bootstrap rejected", 0) end\n'
-			..'return b('..encodedCredential..', '..encodedReleaseRef..')'
+			..'local b, e = loadstring(s, "@bvc/bootstrap")\n'
+			..'if type(b) ~= "function" then error(e or "BVC bootstrap rejected", 0) end\n'
+			..'return b('..encodedReleaseRef..')'
 	end
-	if shared.BadVapeCustomProfile then
-		teleportScript = 'shared.BadVapeCustomProfile = '
-			..httpService:JSONEncode(tostring(shared.BadVapeCustomProfile))..'\n'..teleportScript
+	if shared.BVCCustomProfile then
+		teleportScript = 'shared.BVCCustomProfile = '
+			..httpService:JSONEncode(tostring(shared.BVCCustomProfile))..'\n'..teleportScript
 	end
 
-	if not shared.BadVapeQueueTeleport('99-loader', teleportScript) then
+	if not shared.BVCQueueTeleport('99-loader', teleportScript) then
 		recordDiagnostic('teleport_queue_registration_failed', {reason = 'queue-part-rejected'})
 		return false
 	end
 	recordDiagnostic('teleport_queue_ready', {
-		credentialKind = teleportMarker and 'luaprot' or 'uid',
+		credentialKind = 'free',
 		releaseRef = installedRef,
 	})
 	local queueAttempted = false
@@ -557,9 +505,9 @@ local function installTeleportReload()
 			queueFlushScheduled = false
 			if teleportFailed or generation ~= teleportGeneration or queueAttempted then return end
 			queueAttempted = true
-			if not shared.BadVapeFlushTeleportQueue() then
+			if not shared.BVCFlushTeleportQueue() then
 				queueAttempted = false
-				vape:CreateNotification('BadVape', 'Your executor could not queue the teleport reload.', 8, 'warning')
+				vape:CreateNotification('BVC', 'Your executor could not queue the teleport reload.', 8, 'warning')
 			else
 				recordDiagnostic('teleport_started', {state = tostring(teleportState)})
 			end
@@ -577,7 +525,7 @@ local function installTeleportReload()
 	end
 	teleportReloadInstalled = true
 	if #teleportQueueCandidates() == 0 then
-		vape:CreateNotification('BadVape', 'This executor does not support queue on teleport.', 8, 'warning')
+		vape:CreateNotification('BVC', 'This executor does not support queue on teleport.', 8, 'warning')
 	end
 	return true
 end
@@ -586,7 +534,7 @@ local function finishLoading()
 	vape.Init = nil
 	local loaded, loadError = pcall(vape.Load, vape)
 	if not loaded then
-		error('BadVape GUI load failed: '..tostring(loadError), 0)
+		error('BVC GUI load failed: '..tostring(loadError), 0)
 	end
 	task.spawn(function()
 		repeat
@@ -597,7 +545,7 @@ local function finishLoading()
 
 	installTeleportReload()
 
-	local suppressFinishedNotification = reloadRequested or shared.BadVapeReload == true
+	local suppressFinishedNotification = reloadRequested or shared.BVCReload == true
 	if not suppressFinishedNotification then
 		if not vape.Categories then return end
 		if vape.Categories.Main.Options['GUI bind indicator'].Enabled then
@@ -606,8 +554,8 @@ local function finishLoading()
 			end
 			vape:CreateNotification('Finished Loading', (vape.VapeButton and 'Press the button in the top right' or 'Press '..table.concat(vape.Keybind, ' + '):upper())..' to open GUI', 5)
 			task.delay(1, function()
-				if shared.BadVapeUpdated then
-					vape:CreateNotification('BadVape', `Script has updated from {shared.BadVapeUpdated} to {readfile('badvape/profiles/commit.txt')}`, 10, 'info')
+				if shared.BVCUpdated then
+					vape:CreateNotification('BVC', `Script has updated from {shared.BVCUpdated} to {readfile('bvc/profiles/commit.txt')}`, 10, 'info')
 				end
 			end)
 		end
@@ -616,8 +564,8 @@ local function finishLoading()
 	-- only after the replacement GUI has loaded so a failed startup can still be
 	-- diagnosed/retried normally.
 	if reloadRequested then
-		if shared.BadVapeReload == true then
-			shared.BadVapeReload = nil
+		if shared.BVCReload == true then
+			shared.BVCReload = nil
 		end
 		reloadRequested = false
 	end
@@ -627,7 +575,7 @@ end
 -- loaded.  The installer stages release profiles separately, so this menu can
 -- preserve the active profile and GUI/theme data when the user chooses Install.
 local function showProfileUpdateMenu()
-	local updateApi = shared.BadVapeProfileUpdate
+	local updateApi = shared.BVCProfileUpdate
 	if type(updateApi) ~= 'table' or type(updateApi.Get) ~= 'function' then
 		return
 	end
@@ -755,13 +703,13 @@ local function showProfileUpdateMenu()
 	-- divider component, so resolve both through the loaded GUI when available and
 	-- degrade to a plain category when it is not.
 	local assetLoader = vape.Libraries and vape.Libraries.getcustomasset
-	local iconPath = 'badvape/assets/new/profilesicon.png'
+	local iconPath = 'bvc/assets/new/profilesicon.png'
 	local updateIcon = ''
 	if type(assetLoader) == 'function' then
 		local iconOk, icon = pcall(assetLoader, iconPath)
 		if iconOk and type(icon) == 'string' then updateIcon = icon end
 		if updateIcon == '' then
-			local fallbackOk, fallbackIcon = pcall(assetLoader, 'badvape/assets/old/profilesicon.png')
+			local fallbackOk, fallbackIcon = pcall(assetLoader, 'bvc/assets/old/profilesicon.png')
 			if fallbackOk and type(fallbackIcon) == 'string' then updateIcon = fallbackIcon end
 		end
 	end
@@ -793,7 +741,7 @@ local function showProfileUpdateMenu()
 		Tooltip = 'Keep the existing profiles unchanged',
 		Function = function()
 			if type(updateApi.Mark) == 'function' then pcall(updateApi.Mark, 'skipped') end
-			vape:CreateNotification('BadVape', 'Profile update skipped.', 5, 'info')
+			vape:CreateNotification('BVC', 'Profile update skipped.', 5, 'info')
 			closeMenu()
 		end
 	})
@@ -803,10 +751,10 @@ local function showProfileUpdateMenu()
 		Function = function()
 			if installProfiles() then
 				if type(updateApi.Mark) == 'function' then pcall(updateApi.Mark, 'installed') end
-				vape:CreateNotification('BadVape', 'Updated profiles were added to the Profiles tab.', 6, 'info')
+				vape:CreateNotification('BVC', 'Updated profiles were added to the Profiles tab.', 6, 'info')
 				closeMenu()
 			else
-				vape:CreateNotification('BadVape', 'Could not install the updated profiles.', 8, 'alert')
+				vape:CreateNotification('BVC', 'Could not install the updated profiles.', 8, 'alert')
 			end
 		end
 	})
@@ -816,10 +764,10 @@ local function showProfileUpdateMenu()
 		Function = function()
 			if overrideProfiles() then
 				if type(updateApi.Mark) == 'function' then pcall(updateApi.Mark, 'applied') end
-				vape:CreateNotification('BadVape', 'Updated profiles installed.', 6, 'info')
+				vape:CreateNotification('BVC', 'Updated profiles installed.', 6, 'info')
 				closeMenu()
 			else
-				vape:CreateNotification('BadVape', 'Could not apply the updated profiles.', 8, 'alert')
+				vape:CreateNotification('BVC', 'Could not apply the updated profiles.', 8, 'alert')
 			end
 		end
 	})
@@ -836,27 +784,27 @@ local function showProfileUpdateMenu()
 end
 
 -- Show release notes in the same category/list UI used by the rest of the
--- runtime.  The installer may provide a structured shared.BadVapeChangelog;
+-- runtime.  The installer may provide a structured shared.BVCChangelog;
 -- the fallback keeps the window useful for revisions that only ship the
 -- runtime metadata.  Nothing here loads or executes a game module.
 local function showChangelogWindow()
-	local previousRevision = shared.BadVapeUpdated
-	if previousRevision == nil or shared.BadVapeChangelogShownFor == previousRevision then
+	local previousRevision = shared.BVCUpdated
+	if previousRevision == nil or shared.BVCChangelogShownFor == previousRevision then
 		return
 	end
 	if not vape or not vape.Loaded or type(vape.CreateCategoryList) ~= 'function' then
 		return
 	end
 	local currentRevision = ''
-	if isfile('badvape/profiles/commit.txt') then
-		local ok, value = pcall(readfile, 'badvape/profiles/commit.txt')
+	if isfile('bvc/profiles/commit.txt') then
+		local ok, value = pcall(readfile, 'bvc/profiles/commit.txt')
 		if ok and type(value) == 'string' then currentRevision = value end
 	end
 	if currentRevision == '' or currentRevision == tostring(previousRevision) then return end
 
 	local entries = {}
-	if type(shared.BadVapeChangelog) == 'table' then
-		for _, entry in ipairs(shared.BadVapeChangelog) do
+	if type(shared.BVCChangelog) == 'table' then
+		for _, entry in ipairs(shared.BVCChangelog) do
 			if type(entry) == 'table' then
 				local title = tostring(entry.title or entry.Name or ''):gsub('^%s+', ''):gsub('%s+$', '')
 				local detail = tostring(entry.detail or entry.description or entry.Tooltip or ''):gsub('^%s+', ''):gsub('%s+$', '')
@@ -868,7 +816,7 @@ local function showChangelogWindow()
 	end
 	if #entries == 0 then
 		entries = {
-			{title = 'Runtime updated', detail = 'BadVape is now running revision '..currentRevision},
+			{title = 'Runtime updated', detail = 'BVC is now running revision '..currentRevision},
 			{title = 'Profile metadata', detail = 'Named profile creation and saved-module details are available.'},
 			{title = 'Cloud config details', detail = 'Select a public config to view its rating and install metadata.'},
 		}
@@ -877,7 +825,7 @@ local function showChangelogWindow()
 	local icon = ''
 	local assetLoader = vape.Libraries and vape.Libraries.getcustomasset
 	if type(assetLoader) == 'function' then
-		local ok, value = pcall(assetLoader, 'badvape/assets/new/profilesicon.png')
+		local ok, value = pcall(assetLoader, 'bvc/assets/new/profilesicon.png')
 		if ok and type(value) == 'string' then icon = value end
 	end
 	local changelog = vape:CreateCategoryList({
@@ -907,7 +855,7 @@ local function showChangelogWindow()
 			if type(vape.Remove) == 'function' then pcall(vape.Remove, vape, 'Changelog') end
 		end,
 	})
-	shared.BadVapeChangelogShownFor = previousRevision
+	shared.BVCChangelogShownFor = previousRevision
 	if changelog.Button and type(changelog.Button.Toggle) == 'function' then
 		changelog.Button:Toggle()
 	end
@@ -918,30 +866,30 @@ local function showChangelogWindow()
 	end
 end
 
-if not isfile('badvape/profiles/gui.txt') then
-	writefile('badvape/profiles/gui.txt', 'new')
+if not isfile('bvc/profiles/gui.txt') then
+	writefile('bvc/profiles/gui.txt', 'new')
 end
-local gui = readCachedFile('badvape/profiles/gui.txt') or 'new'
+local gui = readCachedFile('bvc/profiles/gui.txt') or 'new'
 if gui == 'rise' then
 	gui = 'new'
-	writefile('badvape/profiles/gui.txt', gui)
+	writefile('bvc/profiles/gui.txt', gui)
 end
 if gui ~= 'new' and gui ~= 'old' then
 	gui = 'new'
-	writefile('badvape/profiles/gui.txt', gui)
+	writefile('bvc/profiles/gui.txt', gui)
 end
-if not isfile('badvape/profiles/commit.txt') then
-	writefile('badvape/profiles/commit.txt', 'main')
+if not isfile('bvc/profiles/commit.txt') then
+	writefile('bvc/profiles/commit.txt', 'main')
 end
 
 pcall(function()
-	runtimeEnvironment.BadVapeUsedInit = true
+	runtimeEnvironment.BVCUsedInit = true
 end)
 
 local function loadGuiCandidate(name)
-	local path = 'badvape/guis/'..name..'.lua'
-	if not isfolder('badvape/assets/'..name) then
-		makefolder('badvape/assets/'..name)
+	local path = 'bvc/guis/'..name..'.lua'
+	if not isfolder('bvc/assets/'..name) then
+		makefolder('bvc/assets/'..name)
 	end
 	local sourceOk, source = pcall(downloadFile, path)
 	if not sourceOk then
@@ -965,27 +913,27 @@ if not vape and gui ~= 'old' then
 	vape, fallbackError = loadGuiCandidate('old')
 	if vape then
 		gui = 'old'
-		pcall(writefile, 'badvape/profiles/gui.txt', gui)
+		pcall(writefile, 'bvc/profiles/gui.txt', gui)
 	else
 		guiError = tostring(guiError)..' | '..tostring(fallbackError)
 	end
 end
 if not vape then
-	error('BadVape GUI unavailable: '..tostring(guiError), 0)
+	error('BVC GUI unavailable: '..tostring(guiError), 0)
 end
 
-if not isfolder('badvape/assets/'..gui) then
-	makefolder('badvape/assets/'..gui)
+if not isfolder('bvc/assets/'..gui) then
+	makefolder('bvc/assets/'..gui)
 end
 vape.Place = game.PlaceId
-_G.BadVape = vape
-shared.BadVape = vape
+_G.BVC = vape
+shared.BVC = vape
 local previousUninject = vape.Uninject
 if type(previousUninject) == 'function' then
 	vape.Uninject = function(self, ...)
-		local ownsSharedRuntime = shared.BadVape == self
-		if shared.BadVapeDownloadFile == ownedDownloadFile then
-			shared.BadVapeDownloadFile = nil
+		local ownsSharedRuntime = shared.BVC == self
+		if shared.BVCDownloadFile == ownedDownloadFile then
+			shared.BVCDownloadFile = nil
 		end
 		local results = table.pack(pcall(previousUninject, self, ...))
 		-- These handles are runtime-scoped.  Clear only values owned by this
@@ -993,11 +941,9 @@ if type(previousUninject) == 'function' then
 		-- teleport/auth state if both loaders briefly overlap.
 		if ownsSharedRuntime then
 			for _, key in {
-				'BadVapeLuaProtLoadSignal',
-				'BadVapeProtectedFailure',
-				'BadVapeTeleportQueueParts',
-				'BadVapeQueueTeleport',
-				'BadVapeFlushTeleportQueue',
+				'BVCTeleportQueueParts',
+				'BVCQueueTeleport',
+				'BVCFlushTeleportQueue',
 			} do
 				shared[key] = nil
 			end
@@ -1010,273 +956,23 @@ if type(previousUninject) == 'function' then
 	end
 end
 loadMaxPrediction()
-loadBadVapeTheme()
+loadBVCTheme()
 if guiFallbackReason then
-	vape:CreateNotification('BadVape', 'The selected GUI failed, so compatibility mode was loaded: '..tostring(guiFallbackReason), 12, 'warning')
-end
-
-local rivalsProfilePlaces = {
-	[17625359962] = 17625359962,
-	[117398147513099] = 117398147513099,
-	[133215910299950] = 133215910299950,
-	[18126510175] = 17625359962,
-	[71874690745115] = 117398147513099,
-	[129604661913557] = 133215910299950,
-}
-
-local luaProtRoutes = {
-	[6872274481] = {canonicalPlace = 6872274481, productMarker = 'B', productName = 'BedWars', loaderPath = 'badvape/libraries/luaprot-bedwars.lua'},
-	[8444591321] = {canonicalPlace = 6872274481, productMarker = 'B', productName = 'BedWars', loaderPath = 'badvape/libraries/luaprot-bedwars.lua'},
-	[8560631822] = {canonicalPlace = 6872274481, productMarker = 'B', productName = 'BedWars', loaderPath = 'badvape/libraries/luaprot-bedwars.lua'},
-	[17625359962] = {canonicalPlace = 17625359962, productMarker = 'R', productName = 'Rivals', loaderPath = 'badvape/libraries/luaprot-rivals.lua'},
-	[117398147513099] = {canonicalPlace = 17625359962, productMarker = 'R', productName = 'Rivals', loaderPath = 'badvape/libraries/luaprot-rivals.lua'},
-	[133215910299950] = {canonicalPlace = 17625359962, productMarker = 'R', productName = 'Rivals', loaderPath = 'badvape/libraries/luaprot-rivals.lua'},
-	[18126510175] = {canonicalPlace = 17625359962, productMarker = 'R', productName = 'Rivals', loaderPath = 'badvape/libraries/luaprot-rivals.lua'},
-	[71874690745115] = {canonicalPlace = 17625359962, productMarker = 'R', productName = 'Rivals', loaderPath = 'badvape/libraries/luaprot-rivals.lua'},
-	[129604661913557] = {canonicalPlace = 17625359962, productMarker = 'R', productName = 'Rivals', loaderPath = 'badvape/libraries/luaprot-rivals.lua'},
-}
-
-local function luaProtRuntimeEnvironments()
-	local environments, seen = {}, {}
-	local function add(environment)
-		if type(environment) == 'table' and not seen[environment] then
-			seen[environment] = true
-			table.insert(environments, environment)
-		end
-	end
-	add(runtimeEnvironment)
-	if type(getfenv) == 'function' then
-		local ok, environment = pcall(getfenv, 0)
-		if ok then add(environment) end
-	end
-	add(type(_G) == 'table' and _G or nil)
-	return environments
-end
-
-local function installLuaProtKey(key)
-	local installed = false
-	for _, environment in luaProtRuntimeEnvironments() do
-		local ok = pcall(rawset, environment, 'lp_key', key)
-		installed = installed or (ok and rawget(environment, 'lp_key') == key)
-	end
-	return installed
-end
-
-local function rawEnvironmentValue(environment, key)
-	local ok, value = pcall(rawget, environment, key)
-	return ok and value or nil
-end
-
-local function addLuaProtRequestAdapter(adapters, seen, candidate)
-	if type(candidate) == 'function' and not seen[candidate] then
-		seen[candidate] = true
-		table.insert(adapters, candidate)
-	end
-end
-
-local function installLuaProtRequestCompatibility()
-	local environments = luaProtRuntimeEnvironments()
-	local adapters, seen = {}, {}
-	for _, environment in environments do
-		local httpLibrary = rawEnvironmentValue(environment, 'http')
-		addLuaProtRequestAdapter(adapters, seen, type(httpLibrary) == 'table'
-			and rawEnvironmentValue(httpLibrary, 'request') or nil)
-		addLuaProtRequestAdapter(adapters, seen, rawEnvironmentValue(environment, 'request'))
-		addLuaProtRequestAdapter(adapters, seen, rawEnvironmentValue(environment, 'http_request'))
-		for _, namespace in {'syn', 'fluxus', 'krnl'} do
-			local library = rawEnvironmentValue(environment, namespace)
-			addLuaProtRequestAdapter(adapters, seen, type(library) == 'table'
-				and rawEnvironmentValue(library, 'request') or nil)
-		end
-	end
-	if #adapters == 0 then return false, function() end end
-
-	local function normalizeResponse(response)
-		if type(response) ~= 'table' then return response end
-		local normalized = {}
-		for key, value in response do
-			normalized[key] = value
-		end
-		normalized.StatusCode = tonumber(
-			response.StatusCode or response.Status or response.status_code or response.status
-		)
-		normalized.Body = response.Body or response.body
-		return normalized
-	end
-
-	local function callAdapter(adapter, options)
-		local normalizedOptions = {}
-		for key, value in options do
-			normalizedOptions[key] = value
-		end
-		normalizedOptions.Url = normalizedOptions.Url or normalizedOptions.URL or normalizedOptions.url
-		normalizedOptions.Method = normalizedOptions.Method or normalizedOptions.method or 'GET'
-		return normalizeResponse(adapter(normalizedOptions))
-	end
-
-	-- The official loader always prefers `http.request` when it exists. Some
-	-- executors expose a stub there while their direct `request` works. Probe all
-	-- candidates concurrently and install the first response that is known-good.
-	local selected, selectedIndex
-	local completed = 0
-	for index, adapter in ipairs(adapters) do
-		task.spawn(function()
-			local ok, response = pcall(callAdapter, adapter, {
-				Url = 'https://eu-1.luaprot.net/api/v1/nodes/get',
-				Method = 'GET',
-			})
-			if not selected and ok and type(response) == 'table'
-				and response.StatusCode == 200 and type(response.Body) == 'string'
-				and response.Body ~= '' then
-				selected = adapter
-				selectedIndex = index
-			end
-			completed += 1
-		end)
-	end
-	local probeDeadline = os.clock() + 8
-	while not selected and completed < #adapters and os.clock() < probeDeadline do
-		task.wait()
-	end
-	if not selected then
-		recordDiagnostic('luaprot_request_probe_failed', {adapters = #adapters})
-		return false, function() end
-	end
-	recordDiagnostic('luaprot_request_adapter_selected', {
-		adapter = selectedIndex,
-		adapters = #adapters,
-	})
-
-	local compatibleRequest = function(options)
-		return callAdapter(selected, options)
-	end
-	local changes, touched = {}, {}
-	local function install(target, field)
-		if type(target) ~= 'table' then return end
-		touched[target] = touched[target] or {}
-		if touched[target][field] then return end
-		touched[target][field] = true
-		local previous = rawEnvironmentValue(target, field)
-		local ok = pcall(rawset, target, field, compatibleRequest)
-		if ok and rawEnvironmentValue(target, field) == compatibleRequest then
-			table.insert(changes, {target = target, field = field, previous = previous})
-		end
-	end
-	for _, environment in environments do
-		install(environment, 'request')
-		install(rawEnvironmentValue(environment, 'http'), 'request')
-		for _, namespace in {'syn', 'fluxus', 'krnl'} do
-			install(rawEnvironmentValue(environment, namespace), 'request')
-		end
-	end
-
-	local usable = false
-	for _, environment in environments do
-		local httpLibrary = rawEnvironmentValue(environment, 'http')
-		local httpRequest = type(httpLibrary) == 'table'
-			and rawEnvironmentValue(httpLibrary, 'request') or nil
-		local directRequest = rawEnvironmentValue(environment, 'request')
-		local selectedByLoader = httpLibrary and httpRequest or directRequest
-		if selectedByLoader == compatibleRequest then
-			usable = true
-		else
-			for _, namespace in {'syn', 'fluxus', 'krnl'} do
-				local library = rawEnvironmentValue(environment, namespace)
-				if type(library) == 'table'
-					and rawEnvironmentValue(library, 'request') == compatibleRequest then
-					usable = true
-				end
-			end
-		end
-	end
-
-	local function restore()
-		for index = #changes, 1, -1 do
-			local change = changes[index]
-			if rawEnvironmentValue(change.target, change.field) == compatibleRequest then
-				pcall(rawset, change.target, change.field, change.previous)
-			end
-		end
-	end
-	return usable, restore
-end
-
-local protectedAuthReasonMessages = {
-	ambiguous_hwid = 'Your executor sent conflicting device IDs. Disable HWID spoofing or custom HWID headers, or use another executor.',
-	auth_failed = 'This script credential is invalid, inactive, or for the wrong game. Run /getscript in Discord and select the game you are playing.',
-	hwid_mismatch = 'This license is linked to another device. Run /resethwid in Discord, then run /getscript and execute the new script.',
-	hwid_required = 'Your executor did not provide a device ID. Disable HWID spoofing or use a supported executor, then run /getscript.',
-	rate_limited = 'Too many authentication attempts were made. Wait one minute, then try the script again.',
-	script_outdated = 'This script is outdated. Run /getscript in Discord and execute the latest script.',
-	uid_requires_bound_device = 'Your UID script cannot link a new or reset device. Run /getscript in Discord and execute the new key-based script once.',
-	provider_runtime_failed = 'LuaProt could not finish loading the protected game module. Rejoin, run /getscript again, and send badvape/badvape-debug.txt to support if it repeats.',
-	provider_runtime_timeout = 'LuaProt took too long to finish loading the protected game module. Rejoin, run /getscript again, and send badvape/badvape-debug.txt to support if it repeats.',
-}
-local protectedAuthStageMessages = {
-	credential_invalid = protectedAuthReasonMessages.auth_failed,
-	request_api_unavailable = 'Your executor does not provide a supported HTTP request function. Update it or use a supported executor.',
-	bit32_unavailable = 'Your executor is missing the bit32 functions required by authentication. Update it or use a supported executor.',
-	loadstring_unavailable = 'Your executor is missing loadstring, so BadVape cannot start. Update it or use a supported executor.',
-	http_service_unavailable = 'Your executor could not access HttpService. Rejoin and retry, or use a supported executor.',
-	request_failed = 'BadVape could not reach the authentication server. Check your connection and try again.',
-	request_encode_failed = 'Your executor could not create the authentication request. Update it or use a supported executor.',
-	response_shape_invalid = 'Your executor returned an invalid authentication response. Update it or use a supported executor.',
-	auth_response_invalid = 'The authentication response failed validation. Run /getscript in Discord and execute the latest script.',
-	release_key_invalid = protectedAuthReasonMessages.script_outdated,
-}
-
-local function protectedAuthMessage(failure)
-	if type(failure) ~= 'table' then return nil end
-	local reason = type(failure.reason) == 'string' and failure.reason or nil
-	if reason and protectedAuthReasonMessages[reason] then
-		return protectedAuthReasonMessages[reason]
-	end
-	local stage = type(failure.stage) == 'string' and failure.stage or nil
-	return stage and protectedAuthStageMessages[stage] or nil
+	vape:CreateNotification('BVC', 'The selected GUI failed, so compatibility mode was loaded: '..tostring(guiFallbackReason), 12, 'warning')
 end
 
 local function loadGameModule(placeId)
 	vape.Place = placeId
-	local rivalsProfilePlace = rivalsProfilePlaces[placeId]
-	local luaProtRoute = luaProtKey and luaProtRoutes[placeId] or nil
-	if luaProtKey and not luaProtRoute then
-		recordDiagnostic('luaprot_route_unavailable', {placeId = placeId})
-		vape:CreateNotification(
-			'BadVape authentication',
-			'This LuaProt script is not available in the current game. Run /getscript and select the game you are playing.',
-			20,
-			'warning'
-		)
-		return false
-	end
-	if luaProtRoute and luaProtRoute.productMarker ~= luaProtProductMarker then
-		local credentialProduct = luaProtProductMarker == 'B' and 'BedWars' or 'Rivals'
-		recordDiagnostic('luaprot_product_mismatch', {
-			credentialProduct = credentialProduct,
-			placeId = placeId,
-			placeProduct = luaProtRoute.productName,
-		})
-		vape:CreateNotification(
-			'BadVape authentication',
-			'This script is for '..credentialProduct..', but you are playing '
-				..luaProtRoute.productName..'. Run /getscript and select '
-				..luaProtRoute.productName..'.',
-			20,
-			'warning'
-		)
-		return false
-	end
-	local gamePath = luaProtRoute and luaProtRoute.loaderPath or 'badvape/games/'..placeId..'.lua'
+	local gamePath = 'bvc/games/'..placeId..'.lua'
 	if diagnostics and type(diagnostics.fileState) == 'function' then
 		pcall(diagnostics.fileState, gamePath, nil, 'game-module-load')
 	end
 	local gameSource = readCachedFile(gamePath)
-		or shared.BadVapeDownloadFile(gamePath)
+		or shared.BVCDownloadFile(gamePath)
 	if type(gameSource) ~= 'string' or gameSource == '404: Not Found' then
-		if rivalsProfilePlace then vape.Place = rivalsProfilePlace end
 		recordDiagnostic('game_module_source_unavailable', {path = gamePath, placeId = placeId})
 		vape:CreateNotification(
-			'BadVape',
+			'BVC',
 			'Game module file unavailable; loaded base modules only. Send '..diagnosticsPath..' to support.',
 			15,
 			'warning'
@@ -1284,168 +980,37 @@ local function loadGameModule(placeId)
 		return false
 	end
 
-	shared.BadVapeProtectedFailure = nil
-	local restoreLuaProtRequest = function() end
-	local luaProtLoadSignal
-	if luaProtRoute then
-		if not installLuaProtKey(luaProtKey) then
-			recordDiagnostic('luaprot_environment_unavailable', {path = gamePath, placeId = placeId})
-			vape:CreateNotification(
-				'BadVape authentication',
-				'Your executor could not initialize LuaProt. Update it or use a supported executor, then run /getscript again.',
-				20,
-				'warning'
-			)
-			return false
-		end
-		local requestReady
-		requestReady, restoreLuaProtRequest = installLuaProtRequestCompatibility()
-		if not requestReady then
-			recordDiagnostic('luaprot_request_adapter_unavailable', {path = gamePath, placeId = placeId})
-			vape:CreateNotification(
-				'BadVape authentication',
-				'Your executor does not provide a supported HTTP request function. Update it or use a supported executor.',
-				20,
-				'warning'
-			)
-			return false
-		end
-		vape.Place = luaProtRoute.canonicalPlace
-		luaProtLoadSignal = {
-			productMarker = luaProtRoute.productMarker,
-			state = 'pending',
-		}
-		shared.BadVapeLuaProtLoadSignal = luaProtLoadSignal
-		recordDiagnostic('luaprot_loader_start', {path = gamePath, placeId = placeId})
-	end
-	-- The first Rivals protected release captured the legacy `shared.vape`
-	-- name before the public runtime standardized on `shared.BadVape`. Keep the
-	-- compatibility alias scoped to game-module execution so that already-issued
-	-- protected bytes work without leaking or replacing another runtime's value.
+	-- Keep the legacy `shared.vape` alias scoped to game-module execution so
+	-- modules written against the older runtime name keep working.
 	local previousLegacyVape = shared.vape
 	shared.vape = vape
-	local results
-	if luaProtRoute then
-		local ok, loaded, timedOut = runSourceWithTimeout(gameSource, tostring(placeId), 40, license)
-		if timedOut then
-			shared.BadVapeProtectedFailure = {
-				detail = 'LuaProt loader execution timed out',
-				reason = 'provider_runtime_timeout',
-				stage = 'provider_loader',
-			}
-		end
-		results = table.pack(ok, loaded)
-	else
-		results = table.pack(runSource(gameSource, tostring(placeId), license))
-	end
-	if luaProtLoadSignal and results[1] and results[2] ~= false then
-		local waitStarted = os.clock()
-		local waitDeadline = waitStarted + 30
-		recordDiagnostic('luaprot_payload_wait_start', {path = gamePath, placeId = placeId})
-		while luaProtLoadSignal.state == 'pending' and os.clock() < waitDeadline do
-			task.wait()
-		end
-
-		local elapsedMs = math.floor(math.max(os.clock() - waitStarted, 0) * 1000)
-		if luaProtLoadSignal.state == 'complete' then
-			recordDiagnostic('luaprot_payload_wait_complete', {
-				elapsedMs = elapsedMs,
-				path = gamePath,
-				placeId = placeId,
-			})
-		else
-			local timedOut = luaProtLoadSignal.state == 'pending'
-			local reason = timedOut and 'provider_runtime_timeout' or 'provider_runtime_failed'
-			local detail = timedOut and 'protected payload completion timed out'
-				or 'protected payload reported a loading failure'
-			shared.BadVapeProtectedFailure = {
-				detail = detail,
-				reason = reason,
-				stage = 'provider_runtime',
-			}
-			recordDiagnostic('luaprot_payload_wait_failed', {
-				elapsedMs = elapsedMs,
-				path = gamePath,
-				placeId = placeId,
-				reason = reason,
-			})
-			results = table.pack(false, detail)
-		end
-	end
-	if luaProtLoadSignal and shared.BadVapeLuaProtLoadSignal == luaProtLoadSignal then
-		shared.BadVapeLuaProtLoadSignal = nil
-	end
-	restoreLuaProtRequest()
+	local ok, loaded = runSource(gameSource, tostring(placeId), license)
 	if shared.vape == vape then
 		shared.vape = previousLegacyVape
 	end
-	-- Rivals executes one protected canonical payload, then selects the saved
-	-- default for the concrete mode (or its closest pre-existing mode alias).
-	if rivalsProfilePlace then vape.Place = rivalsProfilePlace end
-	local ok, loaded = table.unpack(results, 1, results.n)
-	local bedwarsRoute = luaProtRoute and luaProtRoute.productMarker == 'B'
-	local deferred = ok and loaded == 'deferred'
-	if deferred then
-		recordDiagnostic('game_module_deferred', {
-			path = gamePath,
-			placeId = placeId,
-			reason = 'destination is not a game server',
-		})
-		return false
-	end
-	-- BedWars must opt in explicitly after its complete bootstrap.  Other
-	-- protected products retain their historical return contract for now.
-	if not ok or loaded == false or (bedwarsRoute and loaded ~= true) then
-		local protectedFailure = type(shared.BadVapeProtectedFailure) == 'table'
-			and shared.BadVapeProtectedFailure or nil
-		local bootstrapFailure = type(shared.BadVapeBedwarsBootstrapFailure) == 'table'
-			and shared.BadVapeBedwarsBootstrapFailure or nil
+	if not ok or loaded == false then
 		local detail = not ok and tostring(loaded) or 'module returned false'
-		if protectedFailure then
-			detail = 'stage='..tostring(protectedFailure.stage or 'unknown')
-				..(protectedFailure.status and ' status='..tostring(protectedFailure.status) or '')
-				..(protectedFailure.correlationId and ' reference='..tostring(protectedFailure.correlationId) or '')
-				..(protectedFailure.detail and ' '..tostring(protectedFailure.detail) or '')
-		elseif bootstrapFailure then
-			detail = 'stage='..tostring(bootstrapFailure.stage or 'bedwars-bootstrap')
-				..(bootstrapFailure.detail and ' '..tostring(bootstrapFailure.detail) or '')
-		end
 		recordDiagnostic('game_module_failed', {
-			correlationId = protectedFailure and protectedFailure.correlationId or 'none',
 			detail = detail,
 			path = gamePath,
 			placeId = placeId,
-			reason = protectedFailure and protectedFailure.reason or 'none',
-			stage = protectedFailure and protectedFailure.stage or (ok and 'module-returned-false' or 'runtime-error'),
-			status = protectedFailure and protectedFailure.status or 'none',
+			reason = 'none',
+			stage = ok and 'module-returned-false' or 'runtime-error',
 		})
-		local authMessage = protectedAuthMessage(protectedFailure)
-		if authMessage then
-			local reference = protectedFailure.correlationId
-				and ' Support reference: '..tostring(protectedFailure.correlationId)..'.' or ''
-			vape:CreateNotification('BadVape authentication', authMessage..reference, 20, 'warning')
-		else
-			vape:CreateNotification(
-				'BadVape',
-				'Game module unavailable; loaded base modules only. '..detail:sub(1, 260)
-					..' Send '..diagnosticsPath..' to support.',
-				15,
-				'warning'
-			)
-		end
-		if shared.BadVapeBedwarsBootstrapFailure == bootstrapFailure then
-			shared.BadVapeBedwarsBootstrapFailure = nil
-		end
+		vape:CreateNotification(
+			'BVC',
+			'Game module unavailable; loaded base modules only. '..detail:sub(1, 260)
+				..' Send '..diagnosticsPath..' to support.',
+			15,
+			'warning'
+		)
 		return false
-	end
-	if luaProtRoute then
-		recordDiagnostic('luaprot_loader_complete', {path = gamePath, placeId = placeId})
 	end
 	recordDiagnostic('game_module_loaded', {bytes = #gameSource, path = gamePath, placeId = placeId})
 	return true
 end
 
-if not shared.BadVapeIndependent then
+if not shared.BVCIndependent then
 	-- Register the teleport handoff before any optional universal/game module
 	-- can wait on Knit or a controller.  A lobby module must never be able to
 	-- prevent the next server from receiving the clean runtime bootstrap.
@@ -1455,7 +1020,7 @@ if not shared.BadVapeIndependent then
 	if registrationBatch then
 		vape:BeginModuleRegistration()
 	end
-	local universalPath = 'badvape/games/universal.lua'
+	local universalPath = 'bvc/games/universal.lua'
 	local universalSourceOk, universalSource = pcall(downloadFile, universalPath)
 	local universalOk, universalError = false, universalSource
 	if universalSourceOk then
@@ -1463,24 +1028,24 @@ if not shared.BadVapeIndependent then
 	end
 	if not universalOk then
 		recordDiagnostic('base_modules_failed', {error = universalError, path = universalPath})
-		vape:CreateNotification('BadVape', 'Base modules failed to load: '..tostring(universalError):sub(1, 240), 12, 'alert')
+		vape:CreateNotification('BVC', 'Base modules failed to load: '..tostring(universalError):sub(1, 240), 12, 'alert')
 	else
 		recordDiagnostic('base_modules_loaded', {path = universalPath})
 	end
 	loadGameModule(game.PlaceId)
-	loadBadVapeTheme()
+	loadBVCTheme()
 	if registrationBatch then
 		vape:EndModuleRegistration()
 	end
 	-- Cold-start yielding is scoped to the initial universal/game/theme pass;
 	-- later custom-module loads should use the normal fast registration path.
-	shared.BadVapeColdStart = false
+	shared.BVCColdStart = false
 	recordDiagnostic('main_finish_loading', {placeId = game.PlaceId})
 	finishLoading()
 	task.defer(showProfileUpdateMenu)
 	task.defer(showChangelogWindow)
 else
-	loadBadVapeTheme()
+	loadBVCTheme()
 	vape.Init = function(...)
 		local result = table.pack(finishLoading(...))
 		task.defer(showProfileUpdateMenu)

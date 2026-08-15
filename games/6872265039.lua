@@ -6,7 +6,7 @@ local replicatedStorage = cloneref(game:GetService('ReplicatedStorage'))
 local inputService = cloneref(game:GetService('UserInputService'))
 
 local lplr = playersService.LocalPlayer
-local vape = shared.BadVape
+local vape = shared.BVC
 local entitylib = vape.Libraries.entity
 local sessioninfo = vape.Libraries.sessioninfo
 local bedwars = {}
@@ -64,8 +64,8 @@ end
 
 local knitReady, knitError = waitForKnitClient()
 if not knitReady then
-	if shared.BadVapeDeveloper then
-		warn('[BadVape] Lobby KnitClient did not finish startup: '..tostring(knitError))
+	if shared.BVCDeveloper then
+		warn('[BVC] Lobby KnitClient did not finish startup: '..tostring(knitError))
 	end
 	return false
 end
@@ -97,8 +97,8 @@ local initialized, initializationError = pcall(function()
 	end)
 end)
 if not initialized then
-	if shared.BadVapeDeveloper then
-		warn('[BadVape] Lobby controller initialization failed: '..tostring(initializationError))
+	if shared.BVCDeveloper then
+		warn('[BVC] Lobby controller initialization failed: '..tostring(initializationError))
 	end
 	return false
 end

@@ -1,9 +1,9 @@
 
-local vape = shared.BadVape
+local vape = shared.BVC
 local loadstring = function(...)
 	local res, err = loadstring(...)
 	if err and vape then
-		vape:CreateNotification('BadVape', 'Failed to load : ' .. err, 30, 'alert')
+		vape:CreateNotification('BVC', 'Failed to load : ' .. err, 30, 'alert')
 	end
 	return res
 end
@@ -15,12 +15,12 @@ local isfile = isfile or function(file)
 end
 local function downloadFile(path, func)
 	if not isfile(path) then
-		if shared.BadVapeDeveloper then
-			error('Missing local BadVape file: '..path)
+		if shared.BVCDeveloper then
+			error('Missing local BVC file: '..path)
 		end
 
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/'.. readfile('badvape/profiles/commit.txt').. '/'.. select(1, path:gsub('badvape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/ezbrohack/bvc-v2/'.. readfile('bvc/profiles/commit.txt').. '/'.. select(1, path:gsub('bvc/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -34,15 +34,15 @@ local function downloadFile(path, func)
 end
 
 vape.Place = 155615604
-if isfile('badvape/games/' .. vape.Place .. '.lua') then
-	loadstring(readfile('badvape/games/' .. vape.Place .. '.lua'), tostring(vape.Place))()
+if isfile('bvc/games/' .. vape.Place .. '.lua') then
+	loadstring(readfile('bvc/games/' .. vape.Place .. '.lua'), tostring(vape.Place))()
 else
-	if not shared.BadVapeDeveloper then
+	if not shared.BVCDeveloper then
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/'.. readfile('badvape/profiles/commit.txt').. '/games/'.. vape.Place.. '.lua', true)
+			return game:HttpGet('https://raw.githubusercontent.com/ezbrohack/bvc-v2/'.. readfile('bvc/profiles/commit.txt').. '/games/'.. vape.Place.. '.lua', true)
 		end)
 		if suc and res ~= '404: Not Found' then
-			loadstring(downloadFile('badvape/games/' .. vape.Place .. '.lua'), tostring(vape.Place))()
+			loadstring(downloadFile('bvc/games/' .. vape.Place .. '.lua'), tostring(vape.Place))()
 		end
 	end
 end

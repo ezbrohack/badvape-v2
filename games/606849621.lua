@@ -1,6 +1,6 @@
 local loadstring = function(...)
 	local res, err = loadstring(...)
-	if err and vape then vape:CreateNotification('BadVape', 'Failed to load : '..err, 30, 'alert') end
+	if err and vape then vape:CreateNotification('BVC', 'Failed to load : '..err, 30, 'alert') end
 	return res
 end
 local isfile = isfile or function(file)
@@ -9,11 +9,11 @@ local isfile = isfile or function(file)
 end
 local function downloadFile(path, func)
 	if not isfile(path) then
-		if shared.BadVapeDeveloper then
-			error('Missing local BadVape file: '..path)
+		if shared.BVCDeveloper then
+			error('Missing local BVC file: '..path)
 		end
 
-		local suc, res = pcall(function() return game:HttpGet('https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/'..readfile('badvape/profiles/commit.txt')..'/'..select(1, path:gsub('badvape/', '')), true) end)
+		local suc, res = pcall(function() return game:HttpGet('https://raw.githubusercontent.com/ezbrohack/bvc-v2/'..readfile('bvc/profiles/commit.txt')..'/'..select(1, path:gsub('bvc/', '')), true) end)
 		if not suc or res == '404: Not Found' then error(res) end
 		if path:find('.lua') then res = '--This watermark is used to delete the file if its cached, remove it to make the file persist after vape updates.\n'..res end
 		writefile(path, res)
@@ -36,13 +36,13 @@ local contextService = cloneref(game:GetService('ContextActionService'))
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
-local vape = shared.BadVape
+local vape = shared.BVC
 local entitylib = vape.Libraries.entity
 local whitelist = vape.Libraries.whitelist
 local prediction = vape.Libraries.prediction
 local targetinfo = vape.Libraries.targetinfo
 local sessioninfo = vape.Libraries.sessioninfo
-local vm = loadstring(downloadFile('badvape/libraries/vm.lua'), 'vm')()
+local vm = loadstring(downloadFile('bvc/libraries/vm.lua'), 'vm')()
 
 local jb = {}
 local InfNitro = {Enabled = false}
@@ -322,7 +322,7 @@ run(function()
 
 	function jb:FireServer(id, ...)
 		if not remotes[id] then
-			notif('BadVape', 'Failed to find remote ('..id..')', 10, 'alert')
+			notif('BVC', 'Failed to find remote ('..id..')', 10, 'alert')
 			return
 		end
 		return hook(remotetable, remotes[id], ...)

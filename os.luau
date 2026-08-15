@@ -1,6 +1,6 @@
 local function getRuntimeFolder()
-	if shared.BadVapeFolder then
-		return shared.BadVapeFolder
+	if shared.BVCFolder then
+		return shared.BVCFolder
 	end
 
 	if debug and debug.info then
@@ -14,7 +14,7 @@ local function getRuntimeFolder()
 		end
 	end
 
-	return 'badvape'
+	return 'bvc'
 end
 
 local function resolveRuntimeEnvironment()
@@ -38,11 +38,11 @@ end
 
 local folder = getRuntimeFolder()
 local runtimeEnvironment = resolveRuntimeEnvironment()
-local previousRuntimeRestore = shared.BadVapeRestoreRuntimeEnvironment
+local previousRuntimeRestore = shared.BVCRestoreRuntimeEnvironment
 if type(previousRuntimeRestore) == 'function' then
 	pcall(previousRuntimeRestore)
 end
-shared.BadVapeFolder = folder
+shared.BVCFolder = folder
 local protect = newcclosure or function(callback)
 	return callback
 end
@@ -103,10 +103,7 @@ if delfolder and isfolder(folder..'/assets/rise') then
 end
 
 if not safeIsFile(folder..'/profiles/commit.txt') then
-	-- Public installs follow the live branch until the installer has recorded
-	-- an immutable release.  `local` is reserved for the explicitly marked
-	-- developer bundle and must never be inferred from a missing cache marker.
-	writefile(folder..'/profiles/commit.txt', 'main')
+	writefile(folder..'/profiles/commit.txt', 'local')
 end
 
 if not safeIsFile(folder..'/profiles/gui.txt') then
@@ -116,7 +113,7 @@ end
 local forwardedLicense = ...
 local license = type(forwardedLicense) == 'table' and forwardedLicense or {}
 license.Key = type(license.Key) == 'string' and license.Key or nil
-license.Commit = license.Commit or 'main'
+license.Commit = license.Commit or 'local'
 
 local builtInProfileNames = {'default', 'blatant'}
 local function ensureBuiltInProfiles(profiles)
@@ -164,8 +161,8 @@ local function repairBuiltInProfileList(path)
 	return changed
 end
 
-local guiColorMarker = folder..'/profiles/.badvape-color'
-local badVapeGuiTheme = {
+local guiColorMarker = folder..'/profiles/.bvc-color'
+local bvcGuiTheme = {
 	Hue = 0.5979853272438049,
 	Sat = 0.2949999965667727,
 	Value = 0.8387499550819432,
@@ -173,7 +170,7 @@ local badVapeGuiTheme = {
 	CustomColor = true,
 }
 
-local function applyBadVapeGuiTheme(path)
+local function applyBVCGuiTheme(path)
 	local data = {
 		Categories = {},
 		Keybind = {'RightShift'},
@@ -197,7 +194,7 @@ local function applyBadVapeGuiTheme(path)
 	data.Categories = type(data.Categories) == 'table' and data.Categories or {}
 	data.Categories.Main = type(data.Categories.Main) == 'table' and data.Categories.Main or {}
 	data.Categories.Main.Options = type(data.Categories.Main.Options) == 'table' and data.Categories.Main.Options or {}
-	data.Categories.Main.Options['GUI Theme'] = badVapeGuiTheme
+	data.Categories.Main.Options['GUI Theme'] = bvcGuiTheme
 	data.Keybind = type(data.Keybind) == 'table' and data.Keybind or {'RightShift'}
 	data.Profile = type(data.Profile) == 'string' and data.Profile or 'default'
 	data.Profiles = ensureBuiltInProfiles(data.Profiles)
@@ -205,7 +202,7 @@ local function applyBadVapeGuiTheme(path)
 	writefile(path, httpService:JSONEncode(data))
 end
 
-local function applyBadVapeGuiThemeOnce()
+local function applyBVCGuiThemeOnce()
 	if safeIsFile(guiColorMarker) then
 		return
 	end
@@ -214,30 +211,27 @@ local function applyBadVapeGuiThemeOnce()
 		for _, path in listfiles(folder..'/profiles') do
 			local normalized = path:gsub('\\', '/')
 			if normalized:find('%.gui%.txt$') then
-				pcall(applyBadVapeGuiTheme, normalized)
+				pcall(applyBVCGuiTheme, normalized)
 			end
 		end
 	end
 
-	pcall(applyBadVapeGuiTheme, folder..'/profiles/'..tostring(game.GameId)..'.gui.txt')
+	pcall(applyBVCGuiTheme, folder..'/profiles/'..tostring(game.GameId)..'.gui.txt')
 	writefile(guiColorMarker, '1')
 end
 
-applyBadVapeGuiThemeOnce()
+applyBVCGuiThemeOnce()
 pcall(repairBuiltInProfileList, folder..'/profiles/2619619496.gui.txt')
 
--- Do not infer developer mode from a cache marker.  A public install can be
--- left with a stale `commit.txt` by an interrupted update, and treating that
--- marker as developer mode bypasses the manifest updater for every run.
--- Private bundles opt in explicitly by setting shared.BadVapeDeveloper=true.
-if shared.BadVapeDeveloper == nil then
-	shared.BadVapeDeveloper = false
+if shared.BVCDeveloper == nil then
+	local commitOk, commit = pcall(readfile, folder..'/profiles/commit.txt')
+	shared.BVCDeveloper = commitOk and commit == 'local'
 end
-shared.BadVapeReload = shared.BadVapeReload or false
+shared.BVCReload = shared.BVCReload or false
 
--- BadVape keeps a virtual `badvape` root so developer/canary installs can use a
+-- BVC keeps a virtual `bvc` root so developer/canary installs can use a
 -- distinct physical folder. Do not rewrite another client's roots.
-local redirectRoots = {'badvape'}
+local redirectRoots = {'bvc'}
 local function ownsRuntimePath(path)
 	if type(path) ~= 'string' then
 		return false
@@ -295,11 +289,11 @@ restoreRuntimeEnvironment = function()
 	end
 	table.clear(environmentHooks)
 	table.clear(runtimeCleanups)
-	if shared.BadVapeRestoreRuntimeEnvironment == restoreRuntimeEnvironment then
-		shared.BadVapeRestoreRuntimeEnvironment = nil
+	if shared.BVCRestoreRuntimeEnvironment == restoreRuntimeEnvironment then
+		shared.BVCRestoreRuntimeEnvironment = nil
 	end
 end
-shared.BadVapeRestoreRuntimeEnvironment = restoreRuntimeEnvironment
+shared.BVCRestoreRuntimeEnvironment = restoreRuntimeEnvironment
 
 local oldReadfile = readfile
 local wrappedReadfile = protect(function(path)
@@ -376,7 +370,7 @@ if oldDelfile then
 end
 
 local function urlToLocalPath(url)
-	local path = url:match('raw%.githubusercontent%.com/[^/]+/badvape%-v2/[^/]+/(.+)')
+	local path = url:match('raw%.githubusercontent%.com/[^/]+/bvc%-v2/[^/]+/(.+)')
 
 	if path then
 		return folder..'/'..path
@@ -385,7 +379,7 @@ local function urlToLocalPath(url)
 	return nil
 end
 
-if shared.BadVapeDeveloper and getrawmetatable and setreadonly and getnamecallmethod then
+if shared.BVCDeveloper and getrawmetatable and setreadonly and getnamecallmethod then
 	local gameMetatable = getrawmetatable(game)
 	local oldNamecall = gameMetatable.__namecall
 	local wrappedNamecall
@@ -404,7 +398,7 @@ if shared.BadVapeDeveloper and getrawmetatable and setreadonly and getnamecallme
 					return readfile(localPath)
 				end
 
-				error('Missing local BadVape file: '..localPath)
+				error('Missing local BVC file: '..localPath)
 			end
 		end
 
@@ -472,7 +466,7 @@ end
 
 if not runtimeReady then
 	restoreRuntimeEnvironment()
-	error('BadVape destination place did not finish loading', 0)
+	error('BVC destination place did not finish loading', 0)
 end
 
 local function waitForLocalPlayer()
@@ -496,7 +490,7 @@ end
 local localPlayer = waitForLocalPlayer()
 if not localPlayer then
 	restoreRuntimeEnvironment()
-	error('BadVape local player unavailable', 0)
+	error('BVC local player unavailable', 0)
 end
 
 local mainPath = folder..'/main.lua'
@@ -513,17 +507,17 @@ for attempt = 1, 3 do
 end
 if not mainSource then
 	restoreRuntimeEnvironment()
-	error('Missing local BadVape entrypoint', 0)
+	error('Missing local BVC entrypoint', 0)
 end
-local mainChunk, mainLoadError = loadstring(mainSource, 'badvape/main.lua')
+local mainChunk, mainLoadError = loadstring(mainSource, 'bvc/main.lua')
 if not mainChunk then
 	restoreRuntimeEnvironment()
-	error('BadVape entrypoint rejected: '..tostring(mainLoadError), 0)
+	error('BVC entrypoint rejected: '..tostring(mainLoadError), 0)
 end
 
 local mainOk, mainResult = pcall(mainChunk, license)
 if not mainOk then
 	restoreRuntimeEnvironment()
-	error('BadVape entrypoint failed: '..tostring(mainResult), 0)
+	error('BVC entrypoint failed: '..tostring(mainResult), 0)
 end
 return mainResult

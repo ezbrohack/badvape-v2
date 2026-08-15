@@ -1,7 +1,7 @@
 local loadstring = function(...)
 	local res, err = loadstring(...)
 	if err and vape then
-		vape:CreateNotification('BadVape', 'Failed to load : ' .. err, 30, 'alert')
+		vape:CreateNotification('BVC', 'Failed to load : ' .. err, 30, 'alert')
 	end
 	return res
 end
@@ -14,16 +14,16 @@ local isfile = isfile
 	end
 local function downloadFile(path, func)
 	if not isfile(path) then
-		if shared.BadVapeDeveloper then
-			error('Missing local BadVape file: '..path)
+		if shared.BVCDeveloper then
+			error('Missing local BVC file: '..path)
 		end
 
 		local suc, res = pcall(function()
 			return game:HttpGet(
-				'https://raw.githubusercontent.com/4fundsagent-source/badvape-v2/'
-					.. readfile('badvape/profiles/commit.txt')
+				'https://raw.githubusercontent.com/ezbrohack/bvc-v2/'
+					.. readfile('bvc/profiles/commit.txt')
 					.. '/'
-					.. select(1, path:gsub('badvape/', '')),
+					.. select(1, path:gsub('bvc/', '')),
 				true
 			)
 		end)
@@ -54,7 +54,7 @@ local debrisService = cloneref(game:GetService('Debris'))
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
 
-local vape = shared.BadVape
+local vape = shared.BVC
 local entitylib = vape.Libraries.entity
 local whitelist = vape.Libraries.whitelist
 local prediction = vape.Libraries.prediction
@@ -143,7 +143,7 @@ local function hookEvent(id, rfunc)
 	end)
 
 	if not suc then
-		notif('BadVape', 'Failed to hook (' .. id .. ')', 10, 'alert')
+		notif('BVC', 'Failed to hook (' .. id .. ')', 10, 'alert')
 	end
 
 	return type(res) == 'function' and res or function() end

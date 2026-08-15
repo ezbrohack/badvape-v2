@@ -1,5 +1,5 @@
-local chunk, loadError = loadstring(game:HttpGet('https://raw.githubusercontent.com/4fundsagent-source/badvape/main/init.lua'), 'init.lua')
+local chunk, loadError = loadstring(game:HttpGet('https://raw.githubusercontent.com/ezbrohack/bvc-v2/main/bootstrap.lua'), '@bvc/bootstrap')
 if type(chunk) ~= 'function' then
-	error(loadError or 'BadVape installer rejected', 0)
+	error(loadError or 'BVC bootstrap rejected', 0)
 end
-return chunk(...)
+return chunk()
